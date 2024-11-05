@@ -37188,7 +37188,8 @@ async function deployAccount(privateKey, starkKeyPub, OZcontractAddress) {
   }
 }
 
-exports.deployAccount = deployAccount;
+
 exports.getAccountContract = getAccountContract;
 exports.getPrivStarkKey = getPrivStarkKey;
 exports.getPublicStarkKey = getPublicStarkKey;
+exports.deployAccount = deployAccount;
