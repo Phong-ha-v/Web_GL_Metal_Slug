@@ -37126,7 +37126,7 @@ function getPrivStarkKey(privateKeyEth) {
   try {
     console.log('privateKeyEth: ', privateKeyEth);
     const privStarkKey = grindKey(privateKeyEth);    
-console.log('privateKey x: ', privStarkKey);
+	console.log('privStarkKey x : ', privStarkKey);
     return '0x0' + privStarkKey
   } catch (e) {
     console.log(e);
