@@ -37130,7 +37130,7 @@ function getPrivStarkKey(privateKeyEth) {
     return '0x0' + privStarkKey
   } catch (e) {
     console.log(e);
-    return '';
+    return "ERROR";
   }
 }
 
@@ -37141,7 +37141,7 @@ function getPublicStarkKey(privStarkKey) {
     return pubStarkKey
   } catch (e) {
     console.log(e);
-    return '';
+    return "ERROR";
   }
 }
 
@@ -37164,7 +37164,7 @@ function getPublicStarkKey(privStarkKey) {
 	console.log("JS RESULT - OZcontractAddress: ", OZcontractAddress);
     return OZcontractAddress
   } catch (e) {
-    return null
+    return "ERROR";
   }
 }
 
@@ -37183,10 +37183,15 @@ async function deployAccount(privateKey, starkKeyPub, OZcontractAddress) {
     console.log('Transaction hash: ', transaction_hash);
     const res = await provider.waitForTransaction(transaction_hash);
     console.log('✅ New OpenZeppelin account created.\n   address =', contract_address);
-    return res.status
+	if (transaction_hash){
+		return "TRUE";
+	}else{
+		return "FALSE";
+	}
+    
   } catch (e) {
     console.log(e);
-    return null
+    return "ERROR";
   }
 }
 
