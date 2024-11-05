@@ -37125,7 +37125,8 @@ const OZaccountClassHash = '0x07dc7899aa655b0aae51eadff6d801a58e97dd99cf4666ee59
 function getPrivStarkKey(privateKeyEth) {
   try {
     console.log('privateKeyEth: ', privateKeyEth);
-    const privStarkKey = grindKey(privateKeyEth);
+    const privStarkKey = grindKey(privateKeyEth);    
+console.log('privateKey x: ', privStarkKey);
     return '0x0' + privStarkKey
   } catch (e) {
     console.log(e);
