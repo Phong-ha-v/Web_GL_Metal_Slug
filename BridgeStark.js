@@ -37161,6 +37161,7 @@ function getPublicStarkKey(privStarkKey) {
       OZaccountConstructorCallData,
       0
     );
+	console.log("JS RESULT - OZcontractAddress: ", OZcontractAddress);
     return OZcontractAddress
   } catch (e) {
     return null
