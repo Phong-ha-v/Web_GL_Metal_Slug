@@ -37137,7 +37137,7 @@ function getPrivStarkKey(privateKeyEth) {
 function getPublicStarkKey(privStarkKey) {
   try {
     console.log('privStarkKey: ', privStarkKey);
-    const pubStarkKey = getStarkKey("0x0" + privStarkKey);
+    const pubStarkKey = getStarkKey(privStarkKey);
     return pubStarkKey
   } catch (e) {
     console.log(e);
