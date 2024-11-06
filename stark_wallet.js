@@ -1,6 +1,4 @@
-﻿'use strict';
-
-function _mergeNamespaces(n, m) {
+﻿function _mergeNamespaces(n, m) {
     m.forEach(function (e) {
         e && typeof e !== 'string' && !Array.isArray(e) && Object.keys(e).forEach(function (k) {
             if (k !== 'default' && !(k in n)) {
