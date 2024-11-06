@@ -37194,9 +37194,3 @@ async function deployAccount(privateKey, starkKeyPub, OZcontractAddress) {
     return "ERROR";
   }
 }
-
-
-exports.getAccountContract = getAccountContract;
-exports.getPrivStarkKey = getPrivStarkKey;
-exports.getPublicStarkKey = getPublicStarkKey;
-exports.deployAccount = deployAccount;
