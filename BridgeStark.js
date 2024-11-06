@@ -78676,14 +78676,14 @@ const sortBy = (t, e) => {
     ];
   } else
     return shuffle(t);
-}, defaultOptions = {
+}, defaultOptions3 = {
   windowObject: ssrSafeWindow != null ? ssrSafeWindow : {},
   isWalletObject: isWalletObj,
   storageFactoryImplementation: (t) => new LocalStorageWrapper(t)
 };
 function getStarknet(t = {}) {
   const { storageFactoryImplementation: e, windowObject: r, isWalletObject: n } = {
-    ...defaultOptions,
+    ...defaultOptions3,
     ...t
   }, o = e("gsw-last");
   return injectMetamaskBridge(r), {
