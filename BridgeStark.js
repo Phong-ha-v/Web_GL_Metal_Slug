@@ -39933,7 +39933,9 @@ async function signMessageStark(typeWallet, message) {
     const typedDataValidate = JSON.parse(message);
     const signature = await myWalletAccount.signMessage(typedDataValidate);
     console.log('Signature: ', signature);
-    return JSON.stringify(signature)
+	const result = JSON.stringify(signature);
+	console.log(result)
+    return result;
   } catch (err) {
     console.log(err);
     return ""
