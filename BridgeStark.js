@@ -39889,7 +39889,7 @@ async function deployAccount(privateKey, starkKeyPub, OZcontractAddress) {
     console.log('privateKey: ', privateKey);
     console.log('starkKeyPub: ', starkKeyPub);
     console.log('OZcontractAddress: ', OZcontractAddress);
-    const provider = new RpcProvider2({ nodeUrl: `http://chain-graph-vic-lab.saworld.io/rpc` });
+    const provider = new RpcProvider2({ nodeUrl: `https://katana.skyvn.top/` });
     const OZaccount = new Account(provider, OZcontractAddress, privateKey);
     const { transaction_hash, contract_address } = await OZaccount.deployAccount({
       classHash: OZaccountClassHash,
