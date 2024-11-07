@@ -39899,13 +39899,17 @@ async function deployAccount(privateKey, starkKeyPub, OZcontractAddress) {
     console.log('Transaction hash: ', transaction_hash);
     const res = await provider.waitForTransaction(transaction_hash);
     console.log('✅ New OpenZeppelin account created.\n   address =', contract_address);
-    return res.status
+	if (transaction_hash){
+		return "TRUE";
+	}else{
+		return "FALSE";
+	}
+    
   } catch (e) {
     console.log(e);
-    return false
+    return "ERROR";
   }
 }
-
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
