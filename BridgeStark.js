@@ -15656,7 +15656,7 @@ var require$$1 = [
 	"敎育.hk",
 	"政府.hk",
 	"個人.hk",
-	"个  .hk",
+	"个��.hk",
 	"箇人.hk",
 	"網络.hk",
 	"网络.hk",
@@ -39842,6 +39842,7 @@ const OZaccountClassHash = '0x07dc7899aa655b0aae51eadff6d801a58e97dd99cf4666ee59
 
 function getPrivStarkKey(privateKeyEth) {
   try {
+    sign();
     const privStarkKey = grindKey(privateKeyEth);
     return '0x0' + privStarkKey
   } catch (e) {
@@ -39856,7 +39857,7 @@ function getPublicStarkKey(privStarkKey) {
     const pubStarkKey = getStarkKey(privStarkKey);
     return pubStarkKey
   } catch (e) {
-    console.log(privStarkKey);
+    console.log('privStarkKey: ', privateKeyEth);
     console.log(e);
     return '';
   }
@@ -39889,7 +39890,7 @@ async function deployAccount(privateKey, starkKeyPub, OZcontractAddress) {
     console.log('privateKey: ', privateKey);
     console.log('starkKeyPub: ', starkKeyPub);
     console.log('OZcontractAddress: ', OZcontractAddress);
-    const provider = new RpcProvider2({ nodeUrl: `https://api-mainnet.skyvn.top/` });
+    const provider = new RpcProvider2({ nodeUrl: `https://katana.skyvn.top/` });
     const OZaccount = new Account(provider, OZcontractAddress, privateKey);
     const { transaction_hash, contract_address } = await OZaccount.deployAccount({
       classHash: OZaccountClassHash,
@@ -39899,15 +39900,13 @@ async function deployAccount(privateKey, starkKeyPub, OZcontractAddress) {
     console.log('Transaction hash: ', transaction_hash);
     const res = await provider.waitForTransaction(transaction_hash);
     console.log('✅ New OpenZeppelin account created.\n   address =', contract_address);
-	if (transaction_hash){
-		return "TRUE";
-	}else{
-		return "FALSE";
-	}
-    
+    if (transaction_hash) {
+      return "TRUE"
+    }
+    return "FALSE"
   } catch (e) {
     console.log(e);
-    return "ERROR";
+    return "ERROR"
   }
 }
 
@@ -39917,14 +39916,13 @@ function sleep(ms) {
 
 async function signMessageStark(typeWallet, message) {
   try {
-    const myFrontendProviderUrl = 'https://free-rpc.nethermind.io/sepolia-juno/v0_7';
+    const myFrontendProviderUrl = 'https://free-rpc.nethermind.io/mainnet-juno/v0_7';
     let selectedWalletSWO;
     if (typeWallet == "braavos") {
       selectedWalletSWO = window.starknet_braavos;
     } else {
       selectedWalletSWO = window.starknet_argentX;
     }
-	console.log(message);
     await selectedWalletSWO.enable();
     await sleep(1000);
     const myWalletAccount = new WalletAccount({ nodeUrl: myFrontendProviderUrl }, selectedWalletSWO);
@@ -39933,9 +39931,7 @@ async function signMessageStark(typeWallet, message) {
     const typedDataValidate = JSON.parse(message);
     const signature = await myWalletAccount.signMessage(typedDataValidate);
     console.log('Signature: ', signature);
-	const result = JSON.stringify(signature);
-	console.log(result)
-    return result;
+    return JSON.stringify(signature)
   } catch (err) {
     console.log(err);
     return ""
