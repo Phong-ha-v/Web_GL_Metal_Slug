@@ -39910,6 +39910,7 @@ async function deployAccount(privateKey, starkKeyPub, OZcontractAddress) {
     return "ERROR";
   }
 }
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
