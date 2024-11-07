@@ -1,7 +1,5 @@
 'use strict';
 
-require('fs');
-
 function _mergeNamespaces(n, m) {
     m.forEach(function (e) {
         e && typeof e !== 'string' && !Array.isArray(e) && Object.keys(e).forEach(function (k) {
@@ -39925,6 +39923,7 @@ async function signMessageStark(typeWallet, message) {
     await sleep(1000);
     const myWalletAccount = new WalletAccount({ nodeUrl: myFrontendProviderUrl }, selectedWalletSWO);
     await sleep(1000);
+    console.log(myWalletAccount);
     const typedDataValidate = JSON.parse(message);
     const signature = await myWalletAccount.signMessage(typedDataValidate);
     console.log('Signature: ', signature);
