@@ -39924,6 +39924,7 @@ async function signMessageStark(typeWallet, message) {
     } else {
       selectedWalletSWO = window.starknet_argentX;
     }
+	console.log(message);
     await selectedWalletSWO.enable();
     await sleep(1000);
     const myWalletAccount = new WalletAccount({ nodeUrl: myFrontendProviderUrl }, selectedWalletSWO);
