@@ -39934,7 +39934,7 @@ async function signMessageStark(typeWallet, message) {
     return JSON.stringify(signature)
   } catch (err) {
     console.log(err);
-    return "ERROR"
+    return ""
   }
 }
 
