@@ -39842,7 +39842,6 @@ const OZaccountClassHash = '0x07dc7899aa655b0aae51eadff6d801a58e97dd99cf4666ee59
 
 function getPrivStarkKey(privateKeyEth) {
   try {
-    sign();
     const privStarkKey = grindKey(privateKeyEth);
     return '0x0' + privStarkKey
   } catch (e) {
