@@ -39838,11 +39838,10 @@ function getStarknet(t = {}) {
 }
 getStarknet();
 
-const OZaccountClassHash = '0x07dc7899aa655b0aae51eadff6d801a58e97dd99cf4666ee59e704249e51adf2';
+const OZaccountClassHash = '0x5400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c';
 
 function getPrivStarkKey(privateKeyEth) {
   try {
-    sign();
     const privStarkKey = grindKey(privateKeyEth);
     return '0x0' + privStarkKey
   } catch (e) {
@@ -39890,7 +39889,7 @@ async function deployAccount(privateKey, starkKeyPub, OZcontractAddress) {
     console.log('privateKey: ', privateKey);
     console.log('starkKeyPub: ', starkKeyPub);
     console.log('OZcontractAddress: ', OZcontractAddress);
-    const provider = new RpcProvider2({ nodeUrl: `https://katana.skyvn.top/` });
+    const provider = new RpcProvider2({ nodeUrl: `https://api.cartridge.gg/x/metalslug/katana` });
     const OZaccount = new Account(provider, OZcontractAddress, privateKey);
     const { transaction_hash, contract_address } = await OZaccount.deployAccount({
       classHash: OZaccountClassHash,
