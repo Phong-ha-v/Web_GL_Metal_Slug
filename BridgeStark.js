@@ -5897,13 +5897,13 @@ function isDeepEqual(a, b) {
   if (Array.isArray(a) && Array.isArray(b)) {
     return a.length === b.length && a.every((item, index) => isDeepEqual(item, b[index]));
   }
-  if (isObject$1(a) && isObject$1(b)) {
+  if (isObject$2(a) && isObject$2(b)) {
     const keys = [...new Set([...Object.keys(a), ...Object.keys(b)])];
     return keys.every(key => isDeepEqual(a[key], b[key]));
   }
   return false;
 }
-function isObject$1(value) {
+function isObject$2(value) {
   return typeof value === 'object' && value !== null;
 }
 
@@ -13539,7 +13539,7 @@ const stringFromCharCode = String.fromCharCode;
  * @param {String} type The error type.
  * @returns {Error} Throws a `RangeError` with the applicable error message.
  */
-function error(type) {
+function error$1(type) {
 	throw new RangeError(errors[type]);
 }
 
@@ -13714,7 +13714,7 @@ const decode$1 = function(input) {
 	for (let j = 0; j < basic; ++j) {
 		// if it's not a basic code point
 		if (input.charCodeAt(j) >= 0x80) {
-			error('not-basic');
+			error$1('not-basic');
 		}
 		output.push(input.charCodeAt(j));
 	}
@@ -13733,16 +13733,16 @@ const decode$1 = function(input) {
 		for (let w = 1, k = base; /* no condition */; k += base) {
 
 			if (index >= inputLength) {
-				error('invalid-input');
+				error$1('invalid-input');
 			}
 
 			const digit = basicToDigit(input.charCodeAt(index++));
 
 			if (digit >= base) {
-				error('invalid-input');
+				error$1('invalid-input');
 			}
 			if (digit > floor((maxInt - i) / w)) {
-				error('overflow');
+				error$1('overflow');
 			}
 
 			i += digit * w;
@@ -13754,7 +13754,7 @@ const decode$1 = function(input) {
 
 			const baseMinusT = base - t;
 			if (w > floor(maxInt / baseMinusT)) {
-				error('overflow');
+				error$1('overflow');
 			}
 
 			w *= baseMinusT;
@@ -13767,7 +13767,7 @@ const decode$1 = function(input) {
 		// `i` was supposed to wrap around from `out` to `0`,
 		// incrementing `n` each time, so we'll fix that now:
 		if (floor(i / out) > maxInt - n) {
-			error('overflow');
+			error$1('overflow');
 		}
 
 		n += floor(i / out);
@@ -13836,7 +13836,7 @@ const encode = function(input) {
 		// but guard against overflow.
 		const handledCPCountPlusOne = handledCPCount + 1;
 		if (m - n > floor((maxInt - delta) / handledCPCountPlusOne)) {
-			error('overflow');
+			error$1('overflow');
 		}
 
 		delta += (m - n) * handledCPCountPlusOne;
@@ -13844,7 +13844,7 @@ const encode = function(input) {
 
 		for (const currentValue of input) {
 			if (currentValue < n && ++delta > maxInt) {
-				error('overflow');
+				error$1('overflow');
 			}
 			if (currentValue === n) {
 				// Represent delta as a generalized variable-length integer.
@@ -29975,8 +29975,8 @@ function parseHeaders(rawHeaders) {
 
 Body.call(Request.prototype);
 
-function Response(bodyInit, options) {
-  if (!(this instanceof Response)) {
+function Response$1(bodyInit, options) {
+  if (!(this instanceof Response$1)) {
     throw new TypeError('Please use the "new" operator, this DOM object constructor cannot be called as a function.')
   }
   if (!options) {
@@ -29995,10 +29995,10 @@ function Response(bodyInit, options) {
   this._initBody(bodyInit);
 }
 
-Body.call(Response.prototype);
+Body.call(Response$1.prototype);
 
-Response.prototype.clone = function() {
-  return new Response(this._bodyInit, {
+Response$1.prototype.clone = function() {
+  return new Response$1(this._bodyInit, {
     status: this.status,
     statusText: this.statusText,
     headers: new Headers(this.headers),
@@ -30006,8 +30006,8 @@ Response.prototype.clone = function() {
   })
 };
 
-Response.error = function() {
-  var response = new Response(null, {status: 200, statusText: ''});
+Response$1.error = function() {
+  var response = new Response$1(null, {status: 200, statusText: ''});
   response.ok = false;
   response.status = 0;
   response.type = 'error';
@@ -30016,12 +30016,12 @@ Response.error = function() {
 
 var redirectStatuses = [301, 302, 303, 307, 308];
 
-Response.redirect = function(url, status) {
+Response$1.redirect = function(url, status) {
   if (redirectStatuses.indexOf(status) === -1) {
     throw new RangeError('Invalid status code')
   }
 
-  return new Response(null, {status: status, headers: {location: url}})
+  return new Response$1(null, {status: status, headers: {location: url}})
 };
 
 var DOMException = g.DOMException;
@@ -30038,7 +30038,7 @@ try {
   DOMException.prototype.constructor = DOMException;
 }
 
-function fetch(input, init) {
+function fetch$1(input, init) {
   return new Promise(function(resolve, reject) {
     var request = new Request(input, init);
 
@@ -30067,7 +30067,7 @@ function fetch(input, init) {
       options.url = 'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL');
       var body = 'response' in xhr ? xhr.response : xhr.responseText;
       setTimeout(function() {
-        resolve(new Response(body, options));
+        resolve(new Response$1(body, options));
       }, 0);
     };
 
@@ -30147,13 +30147,13 @@ function fetch(input, init) {
   })
 }
 
-fetch.polyfill = true;
+fetch$1.polyfill = true;
 
 if (!g.fetch) {
-  g.fetch = fetch;
+  g.fetch = fetch$1;
   g.Headers = Headers;
   g.Request = Request;
-  g.Response = Response;
+  g.Response = Response$1;
 }
 
 var fetchNpmBrowserify;
@@ -30846,7 +30846,7 @@ var BlockTag = /* @__PURE__ */ ((BlockTag2) => {
 })(BlockTag || {});
 
 // src/utils/assert.ts
-function assert(condition, message) {
+function assert$1(condition, message) {
   if (!condition) {
     throw new Error(message || "Assertion failure");
   }
@@ -30903,7 +30903,7 @@ function assertInRange(input, lowerBound, upperBound, inputName = "") {
   const inputBigInt = BigInt(input);
   const lowerBoundBigInt = BigInt(lowerBound);
   const upperBoundBigInt = BigInt(upperBound);
-  assert(
+  assert$1(
     inputBigInt >= lowerBoundBigInt && inputBigInt <= upperBoundBigInt,
     `Message not signable, ${messageSuffix}.`
   );
@@ -32375,37 +32375,37 @@ function responseParser(responseIterator, output, structs, enums, parsedResult) 
 
 // src/utils/calldata/validate.ts
 var validateFelt = (parameter, input) => {
-  assert(
+  assert$1(
     isString(parameter) || isNumber(parameter) || isBigInt(parameter),
     `Validate: arg ${input.name} should be a felt typed as (String, Number or BigInt)`
   );
   if (isString(parameter) && !isHex(parameter))
     return;
   const param = BigInt(parameter.toString(10));
-  assert(
+  assert$1(
     // from : https://github.com/starkware-libs/starknet-specs/blob/29bab650be6b1847c92d4461d4c33008b5e50b1a/api/starknet_api_openrpc.json#L1266
     param >= 0n && param <= 2n ** 252n - 1n,
     `Validate: arg ${input.name} cairo typed ${input.type} should be in range [0, 2^252-1]`
   );
 };
 var validateBytes31 = (parameter, input) => {
-  assert(isString(parameter), `Validate: arg ${input.name} should be a string.`);
-  assert(
+  assert$1(isString(parameter), `Validate: arg ${input.name} should be a string.`);
+  assert$1(
     parameter.length < 32,
     `Validate: arg ${input.name} cairo typed ${input.type} should be a string of less than 32 characters.`
   );
 };
 var validateByteArray = (parameter, input) => {
-  assert(isString(parameter), `Validate: arg ${input.name} should be a string.`);
+  assert$1(isString(parameter), `Validate: arg ${input.name} should be a string.`);
 };
 var validateUint = (parameter, input) => {
   if (isNumber(parameter)) {
-    assert(
+    assert$1(
       parameter <= Number.MAX_SAFE_INTEGER,
       `Validation: Parameter is to large to be typed as Number use (BigInt or String)`
     );
   }
-  assert(
+  assert$1(
     isString(parameter) || isNumber(parameter) || isBigInt(parameter) || typeof parameter === "object" && "low" in parameter && "high" in parameter || typeof parameter === "object" && ["limb0", "limb1", "limb2", "limb3"].every((key) => key in parameter),
     `Validate: arg ${input.name} of cairo type ${input.type} should be type (String, Number or BigInt), but is ${typeof parameter} ${parameter}.`
   );
@@ -32422,60 +32422,60 @@ var validateUint = (parameter, input) => {
   }
   switch (input.type) {
     case "core::integer::u8" /* u8 */:
-      assert(
+      assert$1(
         param >= 0n && param <= 255n,
         `Validate: arg ${input.name} cairo typed ${input.type} should be in range [0 - 255]`
       );
       break;
     case "core::integer::u16" /* u16 */:
-      assert(
+      assert$1(
         param >= 0n && param <= 65535n,
         `Validate: arg ${input.name} cairo typed ${input.type} should be in range [0, 65535]`
       );
       break;
     case "core::integer::u32" /* u32 */:
-      assert(
+      assert$1(
         param >= 0n && param <= 4294967295n,
         `Validate: arg ${input.name} cairo typed ${input.type} should be in range [0, 4294967295]`
       );
       break;
     case "core::integer::u64" /* u64 */:
-      assert(
+      assert$1(
         param >= 0n && param <= 2n ** 64n - 1n,
         `Validate: arg ${input.name} cairo typed ${input.type} should be in range [0, 2^64-1]`
       );
       break;
     case "core::integer::u128" /* u128 */:
-      assert(
+      assert$1(
         param >= 0n && param <= 2n ** 128n - 1n,
         `Validate: arg ${input.name} cairo typed ${input.type} should be in range [0, 2^128-1]`
       );
       break;
     case "core::integer::u256" /* u256 */:
-      assert(
+      assert$1(
         param >= 0n && param <= 2n ** 256n - 1n,
         `Validate: arg ${input.name} is ${input.type} 0 - 2^256-1`
       );
       break;
     case "core::integer::u512" /* u512 */:
-      assert(CairoUint512.is(param), `Validate: arg ${input.name} is ${input.type} 0 - 2^512-1`);
+      assert$1(CairoUint512.is(param), `Validate: arg ${input.name} is ${input.type} 0 - 2^512-1`);
       break;
     case "core::starknet::class_hash::ClassHash" /* ClassHash */:
-      assert(
+      assert$1(
         // from : https://github.com/starkware-libs/starknet-specs/blob/29bab650be6b1847c92d4461d4c33008b5e50b1a/api/starknet_api_openrpc.json#L1670
         param >= 0n && param <= 2n ** 252n - 1n,
         `Validate: arg ${input.name} cairo typed ${input.type} should be in range [0, 2^252-1]`
       );
       break;
     case "core::starknet::contract_address::ContractAddress" /* ContractAddress */:
-      assert(
+      assert$1(
         // from : https://github.com/starkware-libs/starknet-specs/blob/29bab650be6b1847c92d4461d4c33008b5e50b1a/api/starknet_api_openrpc.json#L1245
         param >= 0n && param <= 2n ** 252n - 1n,
         `Validate: arg ${input.name} cairo typed ${input.type} should be in range [0, 2^252-1]`
       );
       break;
     case "core::starknet::secp256k1::Secp256k1Point" /* Secp256k1Point */: {
-      assert(
+      assert$1(
         param >= 0n && param <= 2n ** 512n - 1n,
         `Validate: arg ${input.name} must be ${input.type} : a 512 bits number.`
       );
@@ -32484,7 +32484,7 @@ var validateUint = (parameter, input) => {
   }
 };
 var validateBool = (parameter, input) => {
-  assert(
+  assert$1(
     isBoolean(parameter),
     `Validate: arg ${input.name} of cairo type ${input.type} should be type (Boolean)`
   );
@@ -32495,31 +32495,31 @@ var validateStruct = (parameter, input, structs) => {
     return;
   }
   if (input.type === "core::starknet::eth_address::EthAddress") {
-    assert(
+    assert$1(
       typeof parameter !== "object",
       `EthAddress type is waiting a BigNumberish. Got ${parameter}`
     );
     const param = BigInt(parameter.toString(10));
-    assert(
+    assert$1(
       // from : https://github.com/starkware-libs/starknet-specs/blob/29bab650be6b1847c92d4461d4c33008b5e50b1a/api/starknet_api_openrpc.json#L1259
       param >= 0n && param <= 2n ** 160n - 1n,
       `Validate: arg ${input.name} cairo typed ${input.type} should be in range [0, 2^160-1]`
     );
     return;
   }
-  assert(
+  assert$1(
     typeof parameter === "object" && !Array.isArray(parameter),
     `Validate: arg ${input.name} is cairo type struct (${input.type}), and should be defined as js object (not array)`
   );
   structs[input.type].members.forEach(({ name }) => {
-    assert(
+    assert$1(
       Object.keys(parameter).includes(name),
       `Validate: arg ${input.name} should have a property ${name}`
     );
   });
 };
 var validateEnum = (parameter, input) => {
-  assert(
+  assert$1(
     typeof parameter === "object" && !Array.isArray(parameter),
     `Validate: arg ${input.name} is cairo type Enum (${input.type}), and should be defined as js object (not array)`
   );
@@ -32539,7 +32539,7 @@ var validateEnum = (parameter, input) => {
   );
 };
 var validateTuple = (parameter, input) => {
-  assert(
+  assert$1(
     typeof parameter === "object" && !Array.isArray(parameter),
     `Validate: arg ${input.name} should be a tuple (defined as object)`
   );
@@ -32549,7 +32549,7 @@ var validateArray = (parameter, input, structs, enums) => {
   if (isTypeFelt(baseType) && isLongText(parameter)) {
     return;
   }
-  assert(Array.isArray(parameter), `Validate: arg ${input.name} should be an Array`);
+  assert$1(Array.isArray(parameter), `Validate: arg ${input.name} should be an Array`);
   switch (true) {
     case isTypeFelt(baseType):
       parameter.forEach((param) => validateFelt(param, input));
@@ -32584,14 +32584,14 @@ var validateArray = (parameter, input, structs, enums) => {
 };
 var validateNonZero = (parameter, input) => {
   const baseType = getArrayType(input.type);
-  assert(
+  assert$1(
     isTypeUint(baseType) && baseType !== CairoUint512.abiSelector || isTypeFelt(baseType),
     `Validate: ${input.name} type is not authorized for NonZero type.`
   );
   switch (true) {
     case isTypeFelt(baseType):
       validateFelt(parameter, input);
-      assert(
+      assert$1(
         BigInt(parameter.toString(10)) > 0,
         "Validate: value 0 is not authorized in NonZero felt252 type."
       );
@@ -32600,13 +32600,13 @@ var validateNonZero = (parameter, input) => {
       validateUint(parameter, { name: "", type: baseType });
       switch (input.type) {
         case "core::integer::u256" /* u256 */:
-          assert(
+          assert$1(
             new CairoUint256(parameter).toBigInt() > 0,
             "Validate: value 0 is not authorized in NonZero uint256 type."
           );
           break;
         default:
-          assert(
+          assert$1(
             toBigInt(parameter) > 0,
             "Validate: value 0 is not authorized in NonZero uint type."
           );
@@ -32689,7 +32689,7 @@ var CallData = class _CallData {
         const isView = abi.stateMutability === "view" || abi.state_mutability === "view";
         return type === "INVOKE" /* INVOKE */ ? !isView : isView;
       }).map((abi) => abi.name);
-      assert(
+      assert$1(
         invocableFunctionNames.includes(method),
         `${type === "INVOKE" /* INVOKE */ ? "invocable" : "viewable"} method not found in abi`
       );
@@ -33539,7 +33539,7 @@ function ethRandomPrivateKey() {
 function validateAndParseEthAddress(address) {
   assertInRange(address, ZERO, 2n ** 160n - 1n, "Ethereum Address ");
   const result = addHexPrefix(removeHexPrefix(toHex(address)).padStart(40, "0"));
-  assert(Boolean(result.match(/^(0x)?[0-9a-f]{40}$/)), "Invalid Ethereum Address Format");
+  assert$1(Boolean(result.match(/^(0x)?[0-9a-f]{40}$/)), "Invalid Ethereum Address Format");
   return result;
 }
 var fetchPonyfill_default = typeof window !== "undefined" && window.fetch || // use buildin fetch in browser if available
@@ -33814,7 +33814,7 @@ function getVersionsByType(versionType) {
 }
 
 // src/channel/rpc_0_6.ts
-var defaultOptions = {
+var defaultOptions$1 = {
   headers: { "Content-Type": "application/json" },
   blockIdentifier: "pending" /* PENDING */,
   retries: 200
@@ -33838,9 +33838,9 @@ var RpcChannel = class {
     } else {
       this.nodeUrl = getDefaultNodeUrl(void 0, optionsOrProvider?.default);
     }
-    this.retries = retries || defaultOptions.retries;
-    this.headers = { ...defaultOptions.headers, ...headers };
-    this.blockIdentifier = blockIdentifier || defaultOptions.blockIdentifier;
+    this.retries = retries || defaultOptions$1.retries;
+    this.headers = { ...defaultOptions$1.headers, ...headers };
+    this.blockIdentifier = blockIdentifier || defaultOptions$1.blockIdentifier;
     this.chainId = chainId;
     this.specVersion = specVersion;
     this.waitMode = waitMode || false;
@@ -35106,7 +35106,7 @@ var RpcProvider = class {
   }
   async getL1MessageHash(l2TxHash) {
     const transaction = await this.channel.getTransactionByHash(l2TxHash);
-    assert(transaction.type === "L1_HANDLER", "This L2 transaction is not a L1 message.");
+    assert$1(transaction.type === "L1_HANDLER", "This L2 transaction is not a L1 message.");
     const { calldata, contract_address, entry_point_selector, nonce } = transaction;
     const params = [
       calldata[0],
@@ -35908,7 +35908,7 @@ var revisionConfiguration = {
 };
 function assertRange(data, type, { min, max }) {
   const value = BigInt(data);
-  assert(value >= min && value <= max, `${value} (${type}) is out of bounds [${min}, ${max}]`);
+  assert$1(value >= min && value <= max, `${value} (${type}) is out of bounds [${min}, ${max}]`);
 }
 function identifyRevision({ types, domain }) {
   if (revisionConfiguration[TypedDataRevision.ACTIVE].domain in types && domain.revision === TypedDataRevision.ACTIVE)
@@ -36103,7 +36103,7 @@ function encodeValue(types, type, data, ctx = {}, revision = TypedDataRevision.L
     }
     case "bool": {
       if (revision === TypedDataRevision.ACTIVE) {
-        assert(typeof data === "boolean", `Type mismatch for ${type} ${data}`);
+        assert$1(typeof data === "boolean", `Type mismatch for ${type} ${data}`);
       }
       return [type, getHex(data)];
     }
@@ -36267,7 +36267,7 @@ var events_exports = {};
 __export(events_exports, {
   getAbiEvents: () => getAbiEvents,
   isAbiEvent: () => isAbiEvent,
-  isObject: () => isObject,
+  isObject: () => isObject$1,
   parseEvents: () => parseEvents,
   parseUDCEvent: () => parseUDCEvent
 });
@@ -36325,14 +36325,14 @@ function getCairo1AbiEvents(abi) {
 function getAbiEvents(abi) {
   return isCairo1Abi(abi) ? getCairo1AbiEvents(abi) : getCairo0AbiEvents(abi);
 }
-function isObject(item) {
+function isObject$1(item) {
   return item && typeof item === "object" && !Array.isArray(item);
 }
 function mergeAbiEvents(target, source) {
   const output = { ...target };
-  if (isObject(target) && isObject(source)) {
+  if (isObject$1(target) && isObject$1(source)) {
     Object.keys(source).forEach((key) => {
-      if (isObject(source[key])) {
+      if (isObject$1(source[key])) {
         if (!(key in target))
           Object.assign(output, { [key]: source[key] });
         else
@@ -36352,7 +36352,7 @@ function parseEvents(providerReceivedEvents, abiEvents, abiStructs, abiEnums) {
     }
     while (!abiEvent.name) {
       const hashName = recEvent.keys.shift();
-      assert(!!hashName, 'Not enough data in "key" property of this event.');
+      assert$1(!!hashName, 'Not enough data in "key" property of this event.');
       abiEvent = abiEvent[hashName];
     }
     const parsedEvent = {};
@@ -37120,28 +37120,2745 @@ function onNetworkChanged(swo, callback) {
   swo.on("networkChanged", callback);
 }
 
-const OZaccountClassHash = '0x07dc7899aa655b0aae51eadff6d801a58e97dd99cf4666ee59e704249e51adf2';
+// src/wallet/account.ts
+var WalletAccount = class extends Account {
+  address = "";
+  walletProvider;
+  constructor(providerOrOptions, walletProvider, cairoVersion) {
+    super(providerOrOptions, "", "", cairoVersion);
+    this.walletProvider = walletProvider;
+    this.walletProvider.on("accountsChanged", (res) => {
+      if (!res)
+        return;
+      this.address = res[0].toLowerCase();
+    });
+    this.walletProvider.on("networkChanged", (res) => {
+      if (!res)
+        return;
+      this.channel.setChainId(res);
+    });
+    walletProvider.request({
+      type: "wallet_requestAccounts",
+      params: {
+        silent_mode: false
+      }
+    }).then((res) => {
+      this.address = res[0].toLowerCase();
+    });
+  }
+  /**
+   * WALLET EVENTS
+   */
+  onAccountChange(callback) {
+    onAccountChange(this.walletProvider, callback);
+  }
+  onNetworkChanged(callback) {
+    onNetworkChanged(this.walletProvider, callback);
+  }
+  /**
+   * WALLET SPECIFIC METHODS
+   */
+  requestAccounts(silentMode = false) {
+    return requestAccounts(this.walletProvider, silentMode);
+  }
+  getPermissions() {
+    return getPermissions(this.walletProvider);
+  }
+  switchStarknetChain(chainId) {
+    return switchStarknetChain(this.walletProvider, chainId);
+  }
+  watchAsset(asset) {
+    return watchAsset(this.walletProvider, asset);
+  }
+  addStarknetChain(chain) {
+    return addStarknetChain(this.walletProvider, chain);
+  }
+  /**
+   * ACCOUNT METHODS
+   */
+  execute(calls) {
+    const txCalls = [].concat(calls).map((it) => {
+      const { contractAddress, entrypoint, calldata } = it;
+      return {
+        contract_address: contractAddress,
+        entry_point: entrypoint,
+        calldata
+      };
+    });
+    const params = {
+      calls: txCalls
+    };
+    return addInvokeTransaction(this.walletProvider, params);
+  }
+  declare(payload) {
+    const declareContractPayload = extractContractHashes(payload);
+    const pContract = payload.contract;
+    const cairo1Contract = {
+      ...pContract,
+      abi: stringify2(pContract.abi)
+    };
+    if (!declareContractPayload.compiledClassHash) {
+      throw Error("compiledClassHash is required");
+    }
+    const params = {
+      compiled_class_hash: declareContractPayload.compiledClassHash,
+      contract_class: cairo1Contract
+    };
+    return addDeclareTransaction(this.walletProvider, params);
+  }
+  async deploy(payload) {
+    const { calls, addresses } = buildUDCCall(payload, this.address);
+    const invokeResponse = await this.execute(calls);
+    return {
+      ...invokeResponse,
+      contract_address: addresses
+    };
+  }
+  signMessage(typedData) {
+    return signMessage(this.walletProvider, typedData);
+  }
+  // TODO: MISSING ESTIMATES
+};
+
+Promise.resolve();
+var Z = Object.defineProperty, X = (t, e, r) => e in t ? Z(t, e, { enumerable: !0, configurable: !0, writable: !0, value: r }) : t[e] = r, F = (t, e, r) => (X(t, e + "" , r), r), B = (t, e, r) => {
+  if (!e.has(t))
+    throw TypeError("Cannot " + r);
+}, N = (t, e, r) => (B(t, e, "read from private field"), r ? r.call(t) : e.get(t)), L = (t, e, r) => {
+  if (e.has(t))
+    throw TypeError("Cannot add the same private member more than once");
+  e instanceof WeakSet ? e.add(t) : e.set(t, r);
+}, $ = (t, e, r, n) => (B(t, e, "write to private field"), e.set(t, r), r), P = (t, e, r) => (B(t, e, "access private method"), r);
+const generateUID = () => `${Date.now()}-${Math.floor(Math.random() * 8999999999999) + 1e12}`, shuffle = (t) => {
+  for (let e = t.length - 1; e > 0; e--) {
+    const r = Math.floor(Math.random() * (e + 1));
+    [t[e], t[r]] = [t[r], t[e]];
+  }
+  return t;
+};
+function pipe$1(...t) {
+  return (e) => t.reduce((r, n) => r.then(n), Promise.resolve(e));
+}
+const ssrSafeWindow = typeof window < "u" ? window : null;
+var Y, V;
+const wallets = [
+  {
+    id: "argentX",
+    name: "Argent X",
+    icon: "data:image/svg+xml;base64,Cjxzdmcgd2lkdGg9IjQwIiBoZWlnaHQ9IjM2IiB2aWV3Qm94PSIwIDAgNDAgMzYiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0yNC43NTgyIC0zLjk3MzY0ZS0wN0gxNC42MjM4QzE0LjI4NTEgLTMuOTczNjRlLTA3IDE0LjAxMzggMC4yODExNzggMTQuMDA2NCAwLjYzMDY4M0MxMy44MDE3IDEwLjQ1NDkgOC44MjIzNCAxOS43NzkyIDAuMjUxODkzIDI2LjM4MzdDLTAuMDIwMjA0NiAyNi41OTMzIC0wLjA4MjE5NDYgMjYuOTg3MiAwLjExNjczNCAyNy4yNzA5TDYuMDQ2MjMgMzUuNzM0QzYuMjQ3OTYgMzYuMDIyIDYuNjQwOTkgMzYuMDg3IDYuOTE3NjYgMzUuODc1NEMxMi4yNzY1IDMxLjc3MjggMTYuNTg2OSAyNi44MjM2IDE5LjY5MSAyMS4zMzhDMjIuNzk1MSAyNi44MjM2IDI3LjEwNTcgMzEuNzcyOCAzMi40NjQ2IDM1Ljg3NTRDMzIuNzQxIDM2LjA4NyAzMy4xMzQxIDM2LjAyMiAzMy4zMzYxIDM1LjczNEwzOS4yNjU2IDI3LjI3MDlDMzkuNDY0MiAyNi45ODcyIDM5LjQwMjIgMjYuNTkzMyAzOS4xMzA0IDI2LjM4MzdDMzAuNTU5NyAxOS43NzkyIDI1LjU4MDQgMTAuNDU0OSAyNS4zNzU5IDAuNjMwNjgzQzI1LjM2ODUgMC4yODExNzggMjUuMDk2OSAtMy45NzM2NGUtMDcgMjQuNzU4MiAtMy45NzM2NGUtMDdaIiBmaWxsPSIjRkY4NzVCIi8+Cjwvc3ZnPgo=",
+    downloads: {
+      chrome: "https://chrome.google.com/webstore/detail/argent-x-starknet-wallet/dlcobpjiigpikoobohmabehhmhfoodbb",
+      firefox: "https://addons.mozilla.org/en-US/firefox/addon/argent-x",
+      edge: "https://microsoftedge.microsoft.com/addons/detail/argent-x/ajcicjlkibolbeaaagejfhnofogocgcj"
+    }
+  },
+  {
+    id: "braavos",
+    name: "Braavos",
+    icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgICA8cGF0aAogICAgICAgIGQ9Ik02Mi43MDUgMTMuOTExNkM2Mi44MzU5IDE0LjEzMzMgNjIuNjYyMSAxNC40MDcgNjIuNDAzOSAxNC40MDdDNTcuMTgwNyAxNC40MDcgNTIuOTM0OCAxOC41NDI3IDUyLjgzNTEgMjMuNjgxN0M1MS4wNDY1IDIzLjM0NzcgNDkuMTkzMyAyMy4zMjI2IDQ3LjM2MjYgMjMuNjMxMUM0Ny4yMzYxIDE4LjUxNTYgNDMuMDAwOSAxNC40MDcgMzcuNzk0OCAxNC40MDdDMzcuNTM2NSAxNC40MDcgMzcuMzYyNSAxNC4xMzMxIDM3LjQ5MzUgMTMuOTExMkM0MC4wMjE3IDkuNjI4MDkgNDQuNzIwNCA2Ljc1IDUwLjA5OTEgNi43NUM1NS40NzgxIDYuNzUgNjAuMTc2OSA5LjYyODI2IDYyLjcwNSAxMy45MTE2WiIKICAgICAgICBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXJfMzcyXzQwMjU5KSIgLz4KICAgIDxwYXRoCiAgICAgICAgZD0iTTc4Ljc2MDYgNDUuODcxOEM4MC4yNzI1IDQ2LjMyOTcgODEuNzAyNSA0NS4wMDU1IDgxLjE3MTQgNDMuNTIyMkM3Ni40MTM3IDMwLjIzMzQgNjEuMzkxMSAyNC44MDM5IDUwLjAyNzcgMjQuODAzOUMzOC42NDQyIDI0LjgwMzkgMjMuMjg2OCAzMC40MDcgMTguODc1NCA0My41OTEyQzE4LjM4MjQgNDUuMDY0NSAxOS44MDgzIDQ2LjM0NDYgMjEuMjk3OCA0NS44ODgxTDQ4Ljg3MiAzNy40MzgxQzQ5LjUzMzEgMzcuMjM1NSA1MC4yMzk5IDM3LjIzNDQgNTAuOTAxNyAzNy40MzQ4TDc4Ljc2MDYgNDUuODcxOFoiCiAgICAgICAgZmlsbD0idXJsKCNwYWludDFfbGluZWFyXzM3Ml80MDI1OSkiIC8+CiAgICA8cGF0aAogICAgICAgIGQ9Ik0xOC44MTMyIDQ4LjE3MDdMNDguODkzNSAzOS4wNDcyQzQ5LjU1MDYgMzguODQ3OCA1MC4yNTI0IDM4Ljg0NzMgNTAuOTA5OCAzOS4wNDU2TDgxLjE3ODEgNDguMTc1MkM4My42OTEyIDQ4LjkzMzIgODUuNDExIDUxLjI0ODMgODUuNDExIDUzLjg3MzVWODEuMjIzM0M4NS4yOTQ0IDg3Ljg5OTEgNzkuMjk3NyA5My4yNSA3Mi42MjQ1IDkzLjI1SDYxLjU0MDZDNjAuNDQ0OSA5My4yNSA1OS41NTc3IDkyLjM2MzcgNTkuNTU3NyA5MS4yNjhWODEuNjc4OUM1OS41NTc3IDc3LjkwMzEgNjEuNzkyMSA3NC40ODU1IDY1LjI0OTggNzIuOTcyOUM2OS44ODQ5IDcwLjk0NTQgNzUuMzY4MSA2OC4yMDI4IDc2LjM5OTQgNjIuNjk5MkM3Ni43MzIzIDYwLjkyMjkgNzUuNTc0MSA1OS4yMDk0IDczLjgwMjQgNTguODU3M0M2OS4zMjI2IDU3Ljk2NjcgNjQuMzU2MiA1OC4zMTA3IDYwLjE1NjQgNjAuMTg5M0M1NS4zODg3IDYyLjMyMTkgNTQuMTQxNSA2NS44Njk0IDUzLjY3OTcgNzAuNjMzN0w1My4xMjAxIDc1Ljc2NjJDNTIuOTQ5MSA3Ny4zMzQ5IDUxLjQ3ODUgNzguNTM2NiA0OS45MDE0IDc4LjUzNjZDNDguMjY5OSA3OC41MzY2IDQ3LjA0NjUgNzcuMjk0IDQ2Ljg2OTYgNzUuNjcxMkw0Ni4zMjA0IDcwLjYzMzdDNDUuOTI0OSA2Ni41NTI5IDQ1LjIwNzkgNjIuNTg4NyA0MC45ODk1IDYwLjcwMThDMzYuMTc3NiA1OC41NDk0IDMxLjM0MTkgNTcuODM0NyAyNi4xOTc2IDU4Ljg1NzNDMjQuNDI2IDU5LjIwOTQgMjMuMjY3OCA2MC45MjI5IDIzLjYwMDcgNjIuNjk5MkMyNC42NDEgNjguMjUwNyAzMC4wODEyIDcwLjkzMDUgMzQuNzUwMyA3Mi45NzI5QzM4LjIwOCA3NC40ODU1IDQwLjQ0MjQgNzcuOTAzMSA0MC40NDI0IDgxLjY3ODlWOTEuMjY2M0M0MC40NDI0IDkyLjM2MiAzOS41NTU1IDkzLjI1IDM4LjQ1OTkgOTMuMjVIMjcuMzc1NkMyMC43MDI0IDkzLjI1IDE0LjcwNTcgODcuODk5MSAxNC41ODkxIDgxLjIyMzNWNTMuODY2M0MxNC41ODkxIDUxLjI0NDYgMTYuMzA0NSA0OC45MzE2IDE4LjgxMzIgNDguMTcwN1oiCiAgICAgICAgZmlsbD0idXJsKCNwYWludDJfbGluZWFyXzM3Ml80MDI1OSkiIC8+CiAgICA8ZGVmcz4KICAgICAgICA8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXJfMzcyXzQwMjU5IiB4MT0iNDkuMzA1NyIgeTE9IjIuMDc5IiB4Mj0iODAuMzYyNyIgeTI9IjkzLjY1OTciCiAgICAgICAgICAgIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgICAgICAgPHN0b3Agc3RvcC1jb2xvcj0iI0Y1RDQ1RSIgLz4KICAgICAgICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkY5NjAwIiAvPgogICAgICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICAgICAgPGxpbmVhckdyYWRpZW50IGlkPSJwYWludDFfbGluZWFyXzM3Ml80MDI1OSIgeDE9IjQ5LjMwNTciIHkxPSIyLjA3OSIgeDI9IjgwLjM2MjciIHkyPSI5My42NTk3IgogICAgICAgICAgICBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgICAgICAgIDxzdG9wIHN0b3AtY29sb3I9IiNGNUQ0NUUiIC8+CiAgICAgICAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0ZGOTYwMCIgLz4KICAgICAgICA8L2xpbmVhckdyYWRpZW50PgogICAgICAgIDxsaW5lYXJHcmFkaWVudCBpZD0icGFpbnQyX2xpbmVhcl8zNzJfNDAyNTkiIHgxPSI0OS4zMDU3IiB5MT0iMi4wNzkiIHgyPSI4MC4zNjI3IiB5Mj0iOTMuNjU5NyIKICAgICAgICAgICAgZ3JhZGllbnRVbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICAgICAgICA8c3RvcCBzdG9wLWNvbG9yPSIjRjVENDVFIiAvPgogICAgICAgICAgICA8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNGRjk2MDAiIC8+CiAgICAgICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDwvZGVmcz4KPC9zdmc+",
+    downloads: {
+      chrome: "https://chrome.google.com/webstore/detail/braavos-wallet/jnlgamecbpmbajjfhmmmlhejkemejdma",
+      firefox: "https://addons.mozilla.org/en-US/firefox/addon/braavos-wallet",
+      edge: "https://microsoftedge.microsoft.com/addons/detail/braavos-wallet/hkkpjehhcnhgefhbdcgfkeegglpjchdc",
+      ios: `https://link.braavos.app/dapp/${(Y = ssrSafeWindow == null ? void 0 : ssrSafeWindow.location) == null ? void 0 : Y.host}`,
+      android: `https://link.braavos.app/dapp/${(V = ssrSafeWindow == null ? void 0 : ssrSafeWindow.location) == null ? void 0 : V.host}`
+    }
+  },
+  {
+    id: "okxwallet",
+    name: "OKX Wallet",
+    icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAJDSURBVHgB7Zq9jtpAEMfHlhEgQLiioXEkoAGECwoKxMcTRHmC5E3IoyRPkPAEkI7unJYmTgEFTYwA8a3NTKScLnCHN6c9r1e3P2llWQy7M/s1Gv1twCP0ej37dDq9x+Zut1t3t9vZjDEHIiSRSPg4ZpDL5fxkMvn1cDh8m0wmfugfO53OoFQq/crn8wxfY9EymQyrVCqMfHvScZx1p9ls3pFxXBy/bKlUipGPrVbLuQqAfsCliq3zl0H84zwtjQrOw4Mt1W63P5LvBm2d+Xz+YzqdgkqUy+WgWCy+Mc/nc282m4FqLBYL+3g8fjDxenq72WxANZbLJeA13zDX67UDioL5ybXwafMYu64Ltn3bdDweQ5R97fd7GyhBQMipx4POeEDHIu2LfDdBIGGz+hJ9CQ1ABjoA2egAZPM6AgiCAEQhsi/C4jHyPA/6/f5NG3Ks2+3CYDC4aTccDrn6ojG54MnEvG00GoVmWLIRNZ7wTCwDHYBsdACy0QHIhiuRETxlICWpMMhGZHmqS8qH6JLyGegAZKMDkI0uKf8X4SWlaZo+Pp1bRrwlJU8ZKLIvUjKh0WiQ3sRUbNVq9c5Ebew7KEo2m/1p4jJ4qAmDaqDQBzj5XyiAT4VCQezJigAU+IDU+z8vJFnGWeC+bKQV/5VZ71FV6L7PA3gg3tXrdQ+DgLhC+75Wq3no69P3MC0NFQpx2lL04Ql9gHK1bRDjsSBIvScBnDTk1WrlGIZBorIDEYJj+rhdgnQ67VmWRe0zlplXl81vcyEt0rSoYDUAAAAASUVORK5CYII=",
+    downloads: {
+      chrome: "https://chrome.google.com/webstore/detail/mcohilncbfahbmgdjkbpemcciiolgcge",
+      firefox: "https://addons.mozilla.org/en-US/firefox/addon/okexwallet",
+      edge: "https://microsoftedge.microsoft.com/addons/detail/%E6%AC%A7%E6%98%93-web3-%E9%92%B1%E5%8C%85/pbpjkcldjiffchgbbndmhojiacbgflha",
+      safari: "https://apps.apple.com/us/app/okx-wallet/id6463797825"
+    }
+  },
+  {
+    id: "metamask",
+    name: "MetaMask",
+    icon: "data:image/svg+xml;utf8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMTIiIGhlaWdodD0iMTg5IiB2aWV3Qm94PSIwIDAgMjEyIDE4OSI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cG9seWdvbiBmaWxsPSIjQ0RCREIyIiBwb2ludHM9IjYwLjc1IDE3My4yNSA4OC4zMTMgMTgwLjU2MyA4OC4zMTMgMTcxIDkwLjU2MyAxNjguNzUgMTA2LjMxMyAxNjguNzUgMTA2LjMxMyAxODAgMTA2LjMxMyAxODcuODc1IDg5LjQzOCAxODcuODc1IDY4LjYyNSAxNzguODc1Ii8+PHBvbHlnb24gZmlsbD0iI0NEQkRCMiIgcG9pbnRzPSIxMDUuNzUgMTczLjI1IDEzMi43NSAxODAuNTYzIDEzMi43NSAxNzEgMTM1IDE2OC43NSAxNTAuNzUgMTY4Ljc1IDE1MC43NSAxODAgMTUwLjc1IDE4Ny44NzUgMTMzLjg3NSAxODcuODc1IDExMy4wNjMgMTc4Ljg3NSIgdHJhbnNmb3JtPSJtYXRyaXgoLTEgMCAwIDEgMjU2LjUgMCkiLz48cG9seWdvbiBmaWxsPSIjMzkzOTM5IiBwb2ludHM9IjkwLjU2MyAxNTIuNDM4IDg4LjMxMyAxNzEgOTEuMTI1IDE2OC43NSAxMjAuMzc1IDE2OC43NSAxMjMuNzUgMTcxIDEyMS41IDE1Mi40MzggMTE3IDE0OS42MjUgOTQuNSAxNTAuMTg4Ii8+PHBvbHlnb24gZmlsbD0iI0Y4OUMzNSIgcG9pbnRzPSI3NS4zNzUgMjcgODguODc1IDU4LjUgOTUuMDYzIDE1MC4xODggMTE3IDE1MC4xODggMTIzLjc1IDU4LjUgMTM2LjEyNSAyNyIvPjxwb2x5Z29uIGZpbGw9IiNGODlEMzUiIHBvaW50cz0iMTYuMzEzIDk2LjE4OCAuNTYzIDE0MS43NSAzOS45MzggMTM5LjUgNjUuMjUgMTM5LjUgNjUuMjUgMTE5LjgxMyA2NC4xMjUgNzkuMzEzIDU4LjUgODMuODEzIi8+PHBvbHlnb24gZmlsbD0iI0Q4N0MzMCIgcG9pbnRzPSI0Ni4xMjUgMTAxLjI1IDkyLjI1IDEwMi4zNzUgODcuMTg4IDEyNiA2NS4yNSAxMjAuMzc1Ii8+PHBvbHlnb24gZmlsbD0iI0VBOEQzQSIgcG9pbnRzPSI0Ni4xMjUgMTAxLjgxMyA2NS4yNSAxMTkuODEzIDY1LjI1IDEzNy44MTMiLz48cG9seWdvbiBmaWxsPSIjRjg5RDM1IiBwb2ludHM9IjY1LjI1IDEyMC4zNzUgODcuNzUgMTI2IDk1LjA2MyAxNTAuMTg4IDkwIDE1MyA2NS4yNSAxMzguMzc1Ii8+PHBvbHlnb24gZmlsbD0iI0VCOEYzNSIgcG9pbnRzPSI2NS4yNSAxMzguMzc1IDYwLjc1IDE3My4yNSA5MC41NjMgMTUyLjQzOCIvPjxwb2x5Z29uIGZpbGw9IiNFQThFM0EiIHBvaW50cz0iOTIuMjUgMTAyLjM3NSA5NS4wNjMgMTUwLjE4OCA4Ni42MjUgMTI1LjcxOSIvPjxwb2x5Z29uIGZpbGw9IiNEODdDMzAiIHBvaW50cz0iMzkuMzc1IDEzOC45MzggNjUuMjUgMTM4LjM3NSA2MC43NSAxNzMuMjUiLz48cG9seWdvbiBmaWxsPSIjRUI4RjM1IiBwb2ludHM9IjEyLjkzOCAxODguNDM4IDYwLjc1IDE3My4yNSAzOS4zNzUgMTM4LjkzOCAuNTYzIDE0MS43NSIvPjxwb2x5Z29uIGZpbGw9IiNFODgyMUUiIHBvaW50cz0iODguODc1IDU4LjUgNjQuNjg4IDc4Ljc1IDQ2LjEyNSAxMDEuMjUgOTIuMjUgMTAyLjkzOCIvPjxwb2x5Z29uIGZpbGw9IiNERkNFQzMiIHBvaW50cz0iNjAuNzUgMTczLjI1IDkwLjU2MyAxNTIuNDM4IDg4LjMxMyAxNzAuNDM4IDg4LjMxMyAxODAuNTYzIDY4LjA2MyAxNzYuNjI1Ii8+PHBvbHlnb24gZmlsbD0iI0RGQ0VDMyIgcG9pbnRzPSIxMjEuNSAxNzMuMjUgMTUwLjc1IDE1Mi40MzggMTQ4LjUgMTcwLjQzOCAxNDguNSAxODAuNTYzIDEyOC4yNSAxNzYuNjI1IiB0cmFuc2Zvcm09Im1hdHJpeCgtMSAwIDAgMSAyNzIuMjUgMCkiLz48cG9seWdvbiBmaWxsPSIjMzkzOTM5IiBwb2ludHM9IjcwLjMxMyAxMTIuNSA2NC4xMjUgMTI1LjQzOCA4Ni4wNjMgMTE5LjgxMyIgdHJhbnNmb3JtPSJtYXRyaXgoLTEgMCAwIDEgMTUwLjE4OCAwKSIvPjxwb2x5Z29uIGZpbGw9IiNFODhGMzUiIHBvaW50cz0iMTIuMzc1IC41NjMgODguODc1IDU4LjUgNzUuOTM4IDI3Ii8+PHBhdGggZmlsbD0iIzhFNUEzMCIgZD0iTTEyLjM3NTAwMDIsMC41NjI1MDAwMDggTDIuMjUwMDAwMDMsMzEuNTAwMDAwNSBMNy44NzUwMDAxMiw2NS4yNTAwMDEgTDMuOTM3NTAwMDYsNjcuNTAwMDAxIEw5LjU2MjUwMDE0LDcyLjU2MjUgTDUuMDYyNTAwMDgsNzYuNTAwMDAxMSBMMTEuMjUsODIuMTI1MDAxMiBMNy4zMTI1MDAxMSw4NS41MDAwMDEzIEwxNi4zMTI1MDAyLDk2Ljc1MDAwMTQgTDU4LjUwMDAwMDksODMuODEyNTAxMiBDNzkuMTI1MDAxMiw2Ny4zMTI1MDA0IDg5LjI1MDAwMTMsNTguODc1MDAwMyA4OC44NzUwMDEzLDU4LjUwMDAwMDkgQzg4LjUwMDAwMTMsNTguMTI1MDAwOSA2My4wMDAwMDA5LDM4LjgxMjUwMDYgMTIuMzc1MDAwMiwwLjU2MjUwMDAwOCBaIi8+PGcgdHJhbnNmb3JtPSJtYXRyaXgoLTEgMCAwIDEgMjExLjUgMCkiPjxwb2x5Z29uIGZpbGw9IiNGODlEMzUiIHBvaW50cz0iMTYuMzEzIDk2LjE4OCAuNTYzIDE0MS43NSAzOS45MzggMTM5LjUgNjUuMjUgMTM5LjUgNjUuMjUgMTE5LjgxMyA2NC4xMjUgNzkuMzEzIDU4LjUgODMuODEzIi8+PHBvbHlnb24gZmlsbD0iI0Q4N0MzMCIgcG9pbnRzPSI0Ni4xMjUgMTAxLjI1IDkyLjI1IDEwMi4zNzUgODcuMTg4IDEyNiA2NS4yNSAxMjAuMzc1Ii8+PHBvbHlnb24gZmlsbD0iI0VBOEQzQSIgcG9pbnRzPSI0Ni4xMjUgMTAxLjgxMyA2NS4yNSAxMTkuODEzIDY1LjI1IDEzNy44MTMiLz48cG9seWdvbiBmaWxsPSIjRjg5RDM1IiBwb2ludHM9IjY1LjI1IDEyMC4zNzUgODcuNzUgMTI2IDk1LjA2MyAxNTAuMTg4IDkwIDE1MyA2NS4yNSAxMzguMzc1Ii8+PHBvbHlnb24gZmlsbD0iI0VCOEYzNSIgcG9pbnRzPSI2NS4yNSAxMzguMzc1IDYwLjc1IDE3My4yNSA5MCAxNTMiLz48cG9seWdvbiBmaWxsPSIjRUE4RTNBIiBwb2ludHM9IjkyLjI1IDEwMi4zNzUgOTUuMDYzIDE1MC4xODggODYuNjI1IDEyNS43MTkiLz48cG9seWdvbiBmaWxsPSIjRDg3QzMwIiBwb2ludHM9IjM5LjM3NSAxMzguOTM4IDY1LjI1IDEzOC4zNzUgNjAuNzUgMTczLjI1Ii8+PHBvbHlnb24gZmlsbD0iI0VCOEYzNSIgcG9pbnRzPSIxMi45MzggMTg4LjQzOCA2MC43NSAxNzMuMjUgMzkuMzc1IDEzOC45MzggLjU2MyAxNDEuNzUiLz48cG9seWdvbiBmaWxsPSIjRTg4MjFFIiBwb2ludHM9Ijg4Ljg3NSA1OC41IDY0LjY4OCA3OC43NSA0Ni4xMjUgMTAxLjI1IDkyLjI1IDEwMi45MzgiLz48cG9seWdvbiBmaWxsPSIjMzkzOTM5IiBwb2ludHM9IjcwLjMxMyAxMTIuNSA2NC4xMjUgMTI1LjQzOCA4Ni4wNjMgMTE5LjgxMyIgdHJhbnNmb3JtPSJtYXRyaXgoLTEgMCAwIDEgMTUwLjE4OCAwKSIvPjxwb2x5Z29uIGZpbGw9IiNFODhGMzUiIHBvaW50cz0iMTIuMzc1IC41NjMgODguODc1IDU4LjUgNzUuOTM4IDI3Ii8+PHBhdGggZmlsbD0iIzhFNUEzMCIgZD0iTTEyLjM3NTAwMDIsMC41NjI1MDAwMDggTDIuMjUwMDAwMDMsMzEuNTAwMDAwNSBMNy44NzUwMDAxMiw2NS4yNTAwMDEgTDMuOTM3NTAwMDYsNjcuNTAwMDAxIEw5LjU2MjUwMDE0LDcyLjU2MjUgTDUuMDYyNTAwMDgsNzYuNTAwMDAxMSBMMTEuMjUsODIuMTI1MDAxMiBMNy4zMTI1MDAxMSw4NS41MDAwMDEzIEwxNi4zMTI1MDAyLDk2Ljc1MDAwMTQgTDU4LjUwMDAwMDksODMuODEyNTAxMiBDNzkuMTI1MDAxMiw2Ny4zMTI1MDA0IDg5LjI1MDAwMTMsNTguODc1MDAwMyA4OC44NzUwMDEzLDU4LjUwMDAwMDkgQzg4LjUwMDAwMTMsNTguMTI1MDAwOSA2My4wMDAwMDA5LDM4LjgxMjUwMDYgMTIuMzc1MDAwMiwwLjU2MjUwMDAwOCBaIi8+PC9nPjwvZz48L3N2Zz4=",
+    downloads: {
+      chrome: "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn",
+      firefox: "https://addons.mozilla.org/en-US/firefox/addon/ether-metamask/",
+      edge: "https://microsoftedge.microsoft.com/addons/detail/metamask/ejbalbakoplchlghecdalmeeeajnimhm?hl=en-US"
+    }
+  }
+];
+var T, j, x, H, Q, C, G;
+class LocalStorageWrapper {
+  constructor(e) {
+    L(this, H), L(this, C), L(this, T, !1), L(this, j, void 0), L(this, x, void 0), F(this, "value"), $(this, x, e), P(this, C, G).call(this);
+  }
+  set(e) {
+    return !N(this, T) && !P(this, C, G).call(this) ? !1 : (this.delete(), this.value = e, e && ($(this, j, `${N(this, x)}-${generateUID()}`), localStorage.setItem(N(this, j), e)), !0);
+  }
+  get() {
+    return P(this, H, Q).call(this), this.value;
+  }
+  delete() {
+    return !N(this, T) && !P(this, C, G).call(this) ? !1 : (this.value = null, N(this, j) && localStorage.removeItem(N(this, j)), !0);
+  }
+}
+T = /* @__PURE__ */ new WeakMap(), j = /* @__PURE__ */ new WeakMap(), x = /* @__PURE__ */ new WeakMap(), H = /* @__PURE__ */ new WeakSet(), Q = function() {
+  this.value && this.set(this.value);
+}, C = /* @__PURE__ */ new WeakSet(), G = function() {
+  try {
+    !N(this, T) && typeof window < "u" && ($(this, j, Object.keys(localStorage).find(
+      (t) => t.startsWith(N(this, x))
+    )), $(this, T, !0), N(this, j) && this.set(localStorage.getItem(N(this, j))));
+  } catch (t) {
+    console.warn(t);
+  }
+  return N(this, T);
+};
+function filterBy(t, e) {
+  var r, n;
+  if ((r = e == null ? void 0 : e.include) != null && r.length) {
+    const o = new Set(e.include);
+    return t.filter((i) => o.has(i.id));
+  }
+  if ((n = e == null ? void 0 : e.exclude) != null && n.length) {
+    const o = new Set(e.exclude);
+    return t.filter((i) => !o.has(i.id));
+  }
+  return t;
+}
+const filterByPreAuthorized = async (t) => {
+  const e = await Promise.all(
+    t.map((r) => r.isPreauthorized().catch(() => !1))
+  );
+  return t.filter((r, n) => e[n]);
+}, isWalletObj = (t) => {
+  try {
+    return t && [
+      "request",
+      "isConnected",
+      "provider",
+      "enable",
+      "isPreauthorized",
+      "on",
+      "off",
+      "version",
+      "id",
+      "name",
+      "icon"
+    ].every((e) => e in t);
+  } catch {
+  }
+  return !1;
+};
+function getBuilderId() {
+  return typeof FEDERATION_BUILD_IDENTIFIER < "u" ? FEDERATION_BUILD_IDENTIFIER : "";
+}
+function isDebugMode$1() {
+  return Boolean("");
+}
+function isBrowserEnv$1() {
+  return typeof window < "u";
+}
+const LOG_CATEGORY$1 = "[ Federation Runtime ]";
+function assert(t, e) {
+  t || error(e);
+}
+function error(t) {
+  throw t instanceof Error ? (t.message = `${LOG_CATEGORY$1}: ${t.message}`, t) : new Error(`${LOG_CATEGORY$1}: ${t}`);
+}
+function warn$1(t) {
+  t instanceof Error ? (t.message = `${LOG_CATEGORY$1}: ${t.message}`, console.warn(t)) : console.warn(`${LOG_CATEGORY$1}: ${t}`);
+}
+function addUniqueItem(t, e) {
+  return t.findIndex((r) => r === e) === -1 && t.push(e), t;
+}
+function getFMId(t) {
+  return "version" in t && t.version ? `${t.name}:${t.version}` : "entry" in t && t.entry ? `${t.name}:${t.entry}` : `${t.name}`;
+}
+function isRemoteInfoWithEntry(t) {
+  return typeof t.entry < "u";
+}
+function isPureRemoteEntry(t) {
+  return !t.entry.includes(".json") && t.entry.includes(".js");
+}
+function safeToString$1(t) {
+  try {
+    return JSON.stringify(t, null, 2);
+  } catch {
+    return "";
+  }
+}
+function isObject(t) {
+  return t && typeof t == "object";
+}
+const objectToString = Object.prototype.toString;
+function isPlainObject(t) {
+  return objectToString.call(t) === "[object Object]";
+}
+function _extends$1$1() {
+  return _extends$1$1 = Object.assign || function(t) {
+    for (var e = 1; e < arguments.length; e++) {
+      var r = arguments[e];
+      for (var n in r)
+        Object.prototype.hasOwnProperty.call(r, n) && (t[n] = r[n]);
+    }
+    return t;
+  }, _extends$1$1.apply(this, arguments);
+}
+function _object_without_properties_loose$1(t, e) {
+  if (t == null)
+    return {};
+  var r = {}, n = Object.keys(t), o, i;
+  for (i = 0; i < n.length; i++)
+    o = n[i], !(e.indexOf(o) >= 0) && (r[o] = t[o]);
+  return r;
+}
+const nativeGlobal = (() => {
+  try {
+    return new Function("return this")();
+  } catch {
+    return globalThis;
+  }
+})(), Global = nativeGlobal;
+function definePropertyGlobalVal(t, e, r) {
+  Object.defineProperty(t, e, {
+    value: r,
+    configurable: !1,
+    writable: !0
+  });
+}
+function includeOwnProperty(t, e) {
+  return Object.hasOwnProperty.call(t, e);
+}
+includeOwnProperty(globalThis, "__GLOBAL_LOADING_REMOTE_ENTRY__") || definePropertyGlobalVal(globalThis, "__GLOBAL_LOADING_REMOTE_ENTRY__", {});
+const globalLoading = globalThis.__GLOBAL_LOADING_REMOTE_ENTRY__;
+function setGlobalDefaultVal(t) {
+  var e, r, n, o, i, s;
+  includeOwnProperty(t, "__VMOK__") && !includeOwnProperty(t, "__FEDERATION__") && definePropertyGlobalVal(t, "__FEDERATION__", t.__VMOK__), includeOwnProperty(t, "__FEDERATION__") || (definePropertyGlobalVal(t, "__FEDERATION__", {
+    __GLOBAL_PLUGIN__: [],
+    __INSTANCES__: [],
+    moduleInfo: {},
+    __SHARE__: {},
+    __MANIFEST_LOADING__: {},
+    __PRELOADED_MAP__: /* @__PURE__ */ new Map()
+  }), definePropertyGlobalVal(t, "__VMOK__", t.__FEDERATION__)), (e = t.__FEDERATION__).__GLOBAL_PLUGIN__ != null || (e.__GLOBAL_PLUGIN__ = []), (r = t.__FEDERATION__).__INSTANCES__ != null || (r.__INSTANCES__ = []), (n = t.__FEDERATION__).moduleInfo != null || (n.moduleInfo = {}), (o = t.__FEDERATION__).__SHARE__ != null || (o.__SHARE__ = {}), (i = t.__FEDERATION__).__MANIFEST_LOADING__ != null || (i.__MANIFEST_LOADING__ = {}), (s = t.__FEDERATION__).__PRELOADED_MAP__ != null || (s.__PRELOADED_MAP__ = /* @__PURE__ */ new Map());
+}
+setGlobalDefaultVal(globalThis);
+setGlobalDefaultVal(nativeGlobal);
+function getGlobalFederationInstance(t, e) {
+  const r = getBuilderId();
+  return globalThis.__FEDERATION__.__INSTANCES__.find((n) => !!(r && n.options.id === getBuilderId() || n.options.name === t && !n.options.version && !e || n.options.name === t && e && n.options.version === e));
+}
+function setGlobalFederationInstance(t) {
+  globalThis.__FEDERATION__.__INSTANCES__.push(t);
+}
+function getGlobalFederationConstructor() {
+  return globalThis.__FEDERATION__.__DEBUG_CONSTRUCTOR__;
+}
+function setGlobalFederationConstructor(t, e = isDebugMode$1()) {
+  e && (globalThis.__FEDERATION__.__DEBUG_CONSTRUCTOR__ = t, globalThis.__FEDERATION__.__DEBUG_CONSTRUCTOR_VERSION__ = "0.1.2");
+}
+function getInfoWithoutType(t, e) {
+  if (typeof e == "string") {
+    if (t[e])
+      return {
+        value: t[e],
+        key: e
+      };
+    {
+      const r = Object.keys(t);
+      for (const n of r) {
+        const [o, i] = n.split(":"), s = `${o}:${e}`, a = t[s];
+        if (a)
+          return {
+            value: a,
+            key: s
+          };
+      }
+      return {
+        value: void 0,
+        key: e
+      };
+    }
+  } else
+    throw new Error("key must be string");
+}
+const getGlobalSnapshot = () => nativeGlobal.__FEDERATION__.moduleInfo, getTargetSnapshotInfoByModuleInfo = (t, e) => {
+  const r = getFMId(t), n = getInfoWithoutType(e, r).value;
+  if (n && !n.version && "version" in t && t.version && (n.version = t.version), n)
+    return n;
+  if ("version" in t && t.version) {
+    const { version: o } = t, i = _object_without_properties_loose$1(t, [
+      "version"
+    ]), s = getFMId(i), a = getInfoWithoutType(nativeGlobal.__FEDERATION__.moduleInfo, s).value;
+    if ((a == null ? void 0 : a.version) === o)
+      return a;
+  }
+}, getGlobalSnapshotInfoByModuleInfo = (t) => getTargetSnapshotInfoByModuleInfo(t, nativeGlobal.__FEDERATION__.moduleInfo), setGlobalSnapshotInfoByModuleInfo = (t, e) => {
+  const r = getFMId(t);
+  return nativeGlobal.__FEDERATION__.moduleInfo[r] = e, nativeGlobal.__FEDERATION__.moduleInfo;
+}, addGlobalSnapshot = (t) => (nativeGlobal.__FEDERATION__.moduleInfo = _extends$1$1({}, nativeGlobal.__FEDERATION__.moduleInfo, t), () => {
+  const e = Object.keys(t);
+  for (const r of e)
+    delete nativeGlobal.__FEDERATION__.moduleInfo[r];
+}), getRemoteEntryExports = (t, e) => {
+  const r = e || `__FEDERATION_${t}:custom__`, n = globalThis[r];
+  return {
+    remoteEntryKey: r,
+    entryExports: n
+  };
+}, getGlobalHostPlugins = () => nativeGlobal.__FEDERATION__.__GLOBAL_PLUGIN__, getPreloaded = (t) => globalThis.__FEDERATION__.__PRELOADED_MAP__.get(t), setPreloaded = (t) => globalThis.__FEDERATION__.__PRELOADED_MAP__.set(t, !0), DEFAULT_SCOPE = "default", DEFAULT_REMOTE_TYPE = "global", buildIdentifier = "[0-9A-Za-z-]+", build = `(?:\\+(${buildIdentifier}(?:\\.${buildIdentifier})*))`, numericIdentifier = "0|[1-9]\\d*", numericIdentifierLoose = "[0-9]+", nonNumericIdentifier = "\\d*[a-zA-Z-][a-zA-Z0-9-]*", preReleaseIdentifierLoose = `(?:${numericIdentifierLoose}|${nonNumericIdentifier})`, preReleaseLoose = `(?:-?(${preReleaseIdentifierLoose}(?:\\.${preReleaseIdentifierLoose})*))`, preReleaseIdentifier = `(?:${numericIdentifier}|${nonNumericIdentifier})`, preRelease = `(?:-(${preReleaseIdentifier}(?:\\.${preReleaseIdentifier})*))`, xRangeIdentifier = `${numericIdentifier}|x|X|\\*`, xRangePlain = `[v=\\s]*(${xRangeIdentifier})(?:\\.(${xRangeIdentifier})(?:\\.(${xRangeIdentifier})(?:${preRelease})?${build}?)?)?`, hyphenRange = `^\\s*(${xRangePlain})\\s+-\\s+(${xRangePlain})\\s*$`, mainVersionLoose = `(${numericIdentifierLoose})\\.(${numericIdentifierLoose})\\.(${numericIdentifierLoose})`, loosePlain = `[v=\\s]*${mainVersionLoose}${preReleaseLoose}?${build}?`, gtlt = "((?:<|>)?=?)", comparatorTrim = `(\\s*)${gtlt}\\s*(${loosePlain}|${xRangePlain})`, loneTilde = "(?:~>?)", tildeTrim = `(\\s*)${loneTilde}\\s+`, loneCaret = "(?:\\^)", caretTrim = `(\\s*)${loneCaret}\\s+`, star = "(<|>)?=?\\s*\\*", caret = `^${loneCaret}${xRangePlain}$`, mainVersion = `(${numericIdentifier})\\.(${numericIdentifier})\\.(${numericIdentifier})`, fullPlain = `v?${mainVersion}${preRelease}?${build}?`, tilde = `^${loneTilde}${xRangePlain}$`, xRange = `^${gtlt}\\s*${xRangePlain}$`, comparator = `^${gtlt}\\s*(${fullPlain})$|^$`, gte0 = "^\\s*>=\\s*0.0.0\\s*$";
+function parseRegex(t) {
+  return new RegExp(t);
+}
+function isXVersion(t) {
+  return !t || t.toLowerCase() === "x" || t === "*";
+}
+function pipe(...t) {
+  return (e) => t.reduce((r, n) => n(r), e);
+}
+function extractComparator(t) {
+  return t.match(parseRegex(comparator));
+}
+function combineVersion(t, e, r, n) {
+  const o = `${t}.${e}.${r}`;
+  return n ? `${o}-${n}` : o;
+}
+function parseHyphen(t) {
+  return t.replace(parseRegex(hyphenRange), (e, r, n, o, i, s, a, c, l, u, d, m) => (isXVersion(n) ? r = "" : isXVersion(o) ? r = `>=${n}.0.0` : isXVersion(i) ? r = `>=${n}.${o}.0` : r = `>=${r}`, isXVersion(l) ? c = "" : isXVersion(u) ? c = `<${Number(l) + 1}.0.0-0` : isXVersion(d) ? c = `<${l}.${Number(u) + 1}.0-0` : m ? c = `<=${l}.${u}.${d}-${m}` : c = `<=${c}`, `${r} ${c}`.trim()));
+}
+function parseComparatorTrim(t) {
+  return t.replace(parseRegex(comparatorTrim), "$1$2$3");
+}
+function parseTildeTrim(t) {
+  return t.replace(parseRegex(tildeTrim), "$1~");
+}
+function parseCaretTrim(t) {
+  return t.replace(parseRegex(caretTrim), "$1^");
+}
+function parseCarets(t) {
+  return t.trim().split(/\s+/).map((e) => e.replace(parseRegex(caret), (r, n, o, i, s) => isXVersion(n) ? "" : isXVersion(o) ? `>=${n}.0.0 <${Number(n) + 1}.0.0-0` : isXVersion(i) ? n === "0" ? `>=${n}.${o}.0 <${n}.${Number(o) + 1}.0-0` : `>=${n}.${o}.0 <${Number(n) + 1}.0.0-0` : s ? n === "0" ? o === "0" ? `>=${n}.${o}.${i}-${s} <${n}.${o}.${Number(i) + 1}-0` : `>=${n}.${o}.${i}-${s} <${n}.${Number(o) + 1}.0-0` : `>=${n}.${o}.${i}-${s} <${Number(n) + 1}.0.0-0` : n === "0" ? o === "0" ? `>=${n}.${o}.${i} <${n}.${o}.${Number(i) + 1}-0` : `>=${n}.${o}.${i} <${n}.${Number(o) + 1}.0-0` : `>=${n}.${o}.${i} <${Number(n) + 1}.0.0-0`)).join(" ");
+}
+function parseTildes(t) {
+  return t.trim().split(/\s+/).map((e) => e.replace(parseRegex(tilde), (r, n, o, i, s) => isXVersion(n) ? "" : isXVersion(o) ? `>=${n}.0.0 <${Number(n) + 1}.0.0-0` : isXVersion(i) ? `>=${n}.${o}.0 <${n}.${Number(o) + 1}.0-0` : s ? `>=${n}.${o}.${i}-${s} <${n}.${Number(o) + 1}.0-0` : `>=${n}.${o}.${i} <${n}.${Number(o) + 1}.0-0`)).join(" ");
+}
+function parseXRanges(t) {
+  return t.split(/\s+/).map((e) => e.trim().replace(parseRegex(xRange), (r, n, o, i, s, a) => {
+    const c = isXVersion(o), l = c || isXVersion(i), u = l || isXVersion(s);
+    return n === "=" && u && (n = ""), a = "", c ? n === ">" || n === "<" ? "<0.0.0-0" : "*" : n && u ? (l && (i = 0), s = 0, n === ">" ? (n = ">=", l ? (o = Number(o) + 1, i = 0, s = 0) : (i = Number(i) + 1, s = 0)) : n === "<=" && (n = "<", l ? o = Number(o) + 1 : i = Number(i) + 1), n === "<" && (a = "-0"), `${n + o}.${i}.${s}${a}`) : l ? `>=${o}.0.0${a} <${Number(o) + 1}.0.0-0` : u ? `>=${o}.${i}.0${a} <${o}.${Number(i) + 1}.0-0` : r;
+  })).join(" ");
+}
+function parseStar(t) {
+  return t.trim().replace(parseRegex(star), "");
+}
+function parseGTE0(t) {
+  return t.trim().replace(parseRegex(gte0), "");
+}
+function compareAtom(t, e) {
+  return t = Number(t) || t, e = Number(e) || e, t > e ? 1 : t === e ? 0 : -1;
+}
+function comparePreRelease(t, e) {
+  const { preRelease: r } = t, { preRelease: n } = e;
+  if (r === void 0 && Boolean(n))
+    return 1;
+  if (Boolean(r) && n === void 0)
+    return -1;
+  if (r === void 0 && n === void 0)
+    return 0;
+  for (let o = 0, i = r.length; o <= i; o++) {
+    const s = r[o], a = n[o];
+    if (s !== a)
+      return s === void 0 && a === void 0 ? 0 : s ? a ? compareAtom(s, a) : -1 : 1;
+  }
+  return 0;
+}
+function compareVersion(t, e) {
+  return compareAtom(t.major, e.major) || compareAtom(t.minor, e.minor) || compareAtom(t.patch, e.patch) || comparePreRelease(t, e);
+}
+function eq(t, e) {
+  return t.version === e.version;
+}
+function compare(t, e) {
+  switch (t.operator) {
+    case "":
+    case "=":
+      return eq(t, e);
+    case ">":
+      return compareVersion(t, e) < 0;
+    case ">=":
+      return eq(t, e) || compareVersion(t, e) < 0;
+    case "<":
+      return compareVersion(t, e) > 0;
+    case "<=":
+      return eq(t, e) || compareVersion(t, e) > 0;
+    case void 0:
+      return !0;
+    default:
+      return !1;
+  }
+}
+function parseComparatorString(t) {
+  return pipe(
+    parseCarets,
+    parseTildes,
+    parseXRanges,
+    parseStar
+  )(t);
+}
+function parseRange(t) {
+  return pipe(
+    parseHyphen,
+    parseComparatorTrim,
+    parseTildeTrim,
+    parseCaretTrim
+  )(t.trim()).split(/\s+/).join(" ");
+}
+function satisfy(t, e) {
+  if (!t)
+    return !1;
+  const r = parseRange(e).split(" ").map((u) => parseComparatorString(u)).join(" ").split(/\s+/).map((u) => parseGTE0(u)), n = extractComparator(t);
+  if (!n)
+    return !1;
+  const [, o, , i, s, a, c] = n, l = {
+    operator: o,
+    version: combineVersion(i, s, a, c),
+    major: i,
+    minor: s,
+    patch: a,
+    preRelease: c == null ? void 0 : c.split(".")
+  };
+  for (const u of r) {
+    const d = extractComparator(u);
+    if (!d)
+      return !1;
+    const [, m, , p, h, y, w] = d, g = {
+      operator: m,
+      version: combineVersion(p, h, y, w),
+      major: p,
+      minor: h,
+      patch: y,
+      preRelease: w == null ? void 0 : w.split(".")
+    };
+    if (!compare(g, l))
+      return !1;
+  }
+  return !0;
+}
+function _extends$6() {
+  return _extends$6 = Object.assign || function(t) {
+    for (var e = 1; e < arguments.length; e++) {
+      var r = arguments[e];
+      for (var n in r)
+        Object.prototype.hasOwnProperty.call(r, n) && (t[n] = r[n]);
+    }
+    return t;
+  }, _extends$6.apply(this, arguments);
+}
+function formatShare(t, e) {
+  let r;
+  return "get" in t ? r = t.get : r = () => Promise.resolve(t.lib), _extends$6({
+    deps: [],
+    useIn: [],
+    from: e,
+    loading: null
+  }, t, {
+    shareConfig: _extends$6({
+      requiredVersion: `^${t.version}`,
+      singleton: !1,
+      eager: !1,
+      strictVersion: !1
+    }, t.shareConfig),
+    get: r,
+    loaded: "lib" in t ? !0 : void 0,
+    scope: Array.isArray(t.scope) ? t.scope : [
+      "default"
+    ],
+    strategy: t.strategy || "version-first"
+  });
+}
+function formatShareConfigs(t, e) {
+  return t ? Object.keys(t).reduce((r, n) => (r[n] = formatShare(t[n], e), r), {}) : {};
+}
+function versionLt(t, e) {
+  const r = (n) => {
+    if (!Number.isNaN(Number(n))) {
+      const o = n.split(".");
+      let i = n;
+      for (let s = 0; s < 3 - o.length; s++)
+        i += ".0";
+      return i;
+    }
+    return n;
+  };
+  return !!satisfy(r(t), `<=${r(e)}`);
+}
+const findVersion = (t, e, r, n) => {
+  const o = t[e][r], i = n || function(s, a) {
+    return versionLt(s, a);
+  };
+  return Object.keys(o).reduce((s, a) => !s || i(s, a) || s === "0" ? a : s, 0);
+}, isLoaded = (t) => Boolean(t.loaded) || typeof t.lib == "function";
+function findSingletonVersionOrderByVersion(t, e, r) {
+  const n = t[e][r];
+  return findVersion(t, e, r, function(o, i) {
+    return !isLoaded(n[o]) && versionLt(o, i);
+  });
+}
+function findSingletonVersionOrderByLoaded(t, e, r) {
+  const n = t[e][r];
+  return findVersion(t, e, r, function(o, i) {
+    return isLoaded(n[i]) ? isLoaded(n[o]) ? Boolean(versionLt(o, i)) : !0 : isLoaded(n[o]) ? !1 : versionLt(o, i);
+  });
+}
+function getFindShareFunction(t) {
+  return t === "loaded-first" ? findSingletonVersionOrderByLoaded : findSingletonVersionOrderByVersion;
+}
+function getRegisteredShare(t, e, r, n) {
+  if (!t)
+    return;
+  const { shareConfig: o, scope: i = DEFAULT_SCOPE, strategy: s } = r, a = Array.isArray(i) ? i : [
+    i
+  ];
+  for (const c of a)
+    if (o && t[c] && t[c][e]) {
+      const { requiredVersion: l } = o, u = getFindShareFunction(s)(t, c, e), d = () => {
+        if (o.singleton) {
+          if (typeof l == "string" && !satisfy(u, l)) {
+            const p = `Version ${u} from ${u && t[c][e][u].from} of shared singleton module ${e} does not satisfy the requirement of ${r.from} which needs ${l})`;
+            o.strictVersion ? error(p) : warn$1(p);
+          }
+          return t[c][e][u];
+        } else {
+          if (l === !1 || l === "*" || satisfy(u, l))
+            return t[c][e][u];
+          for (const [p, h] of Object.entries(t[c][e]))
+            if (satisfy(p, l))
+              return h;
+        }
+      }, m = {
+        shareScopeMap: t,
+        scope: c,
+        pkgName: e,
+        version: u,
+        GlobalFederation: Global.__FEDERATION__,
+        resolver: d
+      };
+      return (n.emit(m) || m).resolver();
+    }
+}
+function getGlobalShareScope() {
+  return Global.__FEDERATION__.__SHARE__;
+}
+function _define_property$3(t, e, r) {
+  return e in t ? Object.defineProperty(t, e, {
+    value: r,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : t[e] = r, t;
+}
+var MANIFEST_EXT = ".json", BROWSER_LOG_KEY = "FEDERATION_DEBUG", BROWSER_LOG_VALUE = "1", NameTransformSymbol = {
+  AT: "@",
+  HYPHEN: "-",
+  SLASH: "/"
+}, _obj, NameTransformMap = (_obj = {}, _define_property$3(_obj, NameTransformSymbol.AT, "scope_"), _define_property$3(_obj, NameTransformSymbol.HYPHEN, "_"), _define_property$3(_obj, NameTransformSymbol.SLASH, "__"), _obj), _obj1;
+_obj1 = {}, _define_property$3(_obj1, NameTransformMap[NameTransformSymbol.AT], NameTransformSymbol.AT), _define_property$3(_obj1, NameTransformMap[NameTransformSymbol.HYPHEN], NameTransformSymbol.HYPHEN), _define_property$3(_obj1, NameTransformMap[NameTransformSymbol.SLASH], NameTransformSymbol.SLASH);
+var SEPARATOR = ":";
+function isBrowserEnv() {
+  return typeof window < "u";
+}
+function isDebugMode() {
+  return typeof process < "u" && process.env && process.env.FEDERATION_DEBUG ? Boolean(process.env.FEDERATION_DEBUG) : typeof FEDERATION_DEBUG < "u" && Boolean(FEDERATION_DEBUG);
+}
+function _array_like_to_array$2(t, e) {
+  (e == null || e > t.length) && (e = t.length);
+  for (var r = 0, n = new Array(e); r < e; r++)
+    n[r] = t[r];
+  return n;
+}
+function _array_without_holes(t) {
+  if (Array.isArray(t))
+    return _array_like_to_array$2(t);
+}
+function _class_call_check(t, e) {
+  if (!(t instanceof e))
+    throw new TypeError("Cannot call a class as a function");
+}
+function _defineProperties(t, e) {
+  for (var r = 0; r < e.length; r++) {
+    var n = e[r];
+    n.enumerable = n.enumerable || !1, n.configurable = !0, "value" in n && (n.writable = !0), Object.defineProperty(t, n.key, n);
+  }
+}
+function _create_class(t, e, r) {
+  return e && _defineProperties(t.prototype, e), t;
+}
+function _define_property$2(t, e, r) {
+  return e in t ? Object.defineProperty(t, e, {
+    value: r,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : t[e] = r, t;
+}
+function _iterable_to_array$1(t) {
+  if (typeof Symbol < "u" && t[Symbol.iterator] != null || t["@@iterator"] != null)
+    return Array.from(t);
+}
+function _non_iterable_spread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _to_consumable_array(t) {
+  return _array_without_holes(t) || _iterable_to_array$1(t) || _unsupported_iterable_to_array$2(t) || _non_iterable_spread();
+}
+function _unsupported_iterable_to_array$2(t, e) {
+  if (t) {
+    if (typeof t == "string")
+      return _array_like_to_array$2(t, e);
+    var r = Object.prototype.toString.call(t).slice(8, -1);
+    if (r === "Object" && t.constructor && (r = t.constructor.name), r === "Map" || r === "Set")
+      return Array.from(r);
+    if (r === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r))
+      return _array_like_to_array$2(t, e);
+  }
+}
+function safeToString(t) {
+  try {
+    return JSON.stringify(t, null, 2);
+  } catch {
+    return "";
+  }
+}
+var DEBUG_LOG = "[ FEDERATION DEBUG ]";
+function safeGetLocalStorageItem() {
+  try {
+    if (typeof window < "u" && window.localStorage)
+      return localStorage.getItem(BROWSER_LOG_KEY) === BROWSER_LOG_VALUE;
+  } catch {
+    return typeof document < "u";
+  }
+  return !1;
+}
+var Logger = /* @__PURE__ */ function() {
+  function t(e) {
+    _class_call_check(this, t), _define_property$2(this, "enable", !1), _define_property$2(this, "identifier", void 0), this.identifier = e || DEBUG_LOG, isBrowserEnv() && safeGetLocalStorageItem() ? this.enable = !0 : isDebugMode() && (this.enable = !0);
+  }
+  return _create_class(t, [
+    {
+      key: "info",
+      value: function(e, r) {
+        if (this.enable) {
+          var n = safeToString(r) || "";
+          isBrowserEnv() ? console.info("%c ".concat(this.identifier, ": ").concat(e, " ").concat(n), "color:#3300CC") : console.info("\x1B[34m%s", "".concat(this.identifier, ": ").concat(e, " ").concat(n ? `
+`.concat(n) : ""));
+        }
+      }
+    },
+    {
+      key: "logOriginalInfo",
+      value: function() {
+        for (var e = arguments.length, r = new Array(e), n = 0; n < e; n++)
+          r[n] = arguments[n];
+        if (this.enable)
+          if (isBrowserEnv()) {
+            var o;
+            console.info("%c ".concat(this.identifier, ": OriginalInfo"), "color:#3300CC"), (o = console).log.apply(o, _to_consumable_array(r));
+          } else {
+            var i;
+            console.info("%c ".concat(this.identifier, ": OriginalInfo"), "color:#3300CC"), (i = console).log.apply(i, _to_consumable_array(r));
+          }
+      }
+    }
+  ]), t;
+}(), LOG_CATEGORY = "[ Federation Runtime ]";
+new Logger();
+var composeKeyWithSeparator = function() {
+  for (var t = arguments.length, e = new Array(t), r = 0; r < t; r++)
+    e[r] = arguments[r];
+  return e.length ? e.reduce(function(n, o) {
+    return o ? n ? "".concat(n).concat(SEPARATOR).concat(o) : o : n;
+  }, "") : "";
+}, getResourceUrl = function(t, e) {
+  if ("getPublicPath" in t) {
+    var r = new Function(t.getPublicPath)();
+    return "".concat(r).concat(e);
+  } else
+    return "publicPath" in t ? "".concat(t.publicPath).concat(e) : (console.warn("Can not get resource url, if in debug mode, please ignore", t, e), "");
+}, warn = function(t) {
+  console.warn("".concat(LOG_CATEGORY, ": ").concat(t));
+};
+function _define_property$1(t, e, r) {
+  return e in t ? Object.defineProperty(t, e, {
+    value: r,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : t[e] = r, t;
+}
+function _object_spread$1(t) {
+  for (var e = 1; e < arguments.length; e++) {
+    var r = arguments[e] != null ? arguments[e] : {}, n = Object.keys(r);
+    typeof Object.getOwnPropertySymbols == "function" && (n = n.concat(Object.getOwnPropertySymbols(r).filter(function(o) {
+      return Object.getOwnPropertyDescriptor(r, o).enumerable;
+    }))), n.forEach(function(o) {
+      _define_property$1(t, o, r[o]);
+    });
+  }
+  return t;
+}
+function ownKeys(t, e) {
+  var r = Object.keys(t);
+  if (Object.getOwnPropertySymbols) {
+    var n = Object.getOwnPropertySymbols(t);
+    r.push.apply(r, n);
+  }
+  return r;
+}
+function _object_spread_props(t, e) {
+  return e = e != null ? e : {}, Object.getOwnPropertyDescriptors ? Object.defineProperties(t, Object.getOwnPropertyDescriptors(e)) : ownKeys(Object(e)).forEach(function(r) {
+    Object.defineProperty(t, r, Object.getOwnPropertyDescriptor(e, r));
+  }), t;
+}
+var simpleJoinRemoteEntry = function(t, e) {
+  if (!t)
+    return e;
+  var r = function(o) {
+    if (o === ".")
+      return "";
+    if (o.startsWith("./"))
+      return o.replace("./", "");
+    if (o.startsWith("/")) {
+      var i = o.slice(1);
+      return i.endsWith("/") ? i.slice(0, -1) : i;
+    }
+    return o;
+  }, n = r(t);
+  return n ? n.endsWith("/") ? "".concat(n).concat(e) : "".concat(n, "/").concat(e) : e;
+};
+function generateSnapshotFromManifest(t) {
+  var e = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}, r, n, o = e.remotes, i = o === void 0 ? {} : o, s = e.overrides, a = s === void 0 ? {} : s, c = e.version, l, u = function() {
+    return "publicPath" in t.metaData ? t.metaData.publicPath : t.metaData.getPublicPath;
+  }, d = Object.keys(a), m = {};
+  if (!Object.keys(i).length) {
+    var p;
+    m = ((p = t.remotes) === null || p === void 0 ? void 0 : p.reduce(function(A, O) {
+      var z, R = O.federationContainerName;
+      return d.includes(R) ? z = a[R] : "version" in O ? z = O.version : z = O.entry, A[R] = {
+        matchedVersion: z
+      }, A;
+    }, {})) || {};
+  }
+  Object.keys(i).forEach(function(A) {
+    return m[A] = {
+      matchedVersion: d.includes(A) ? a[A] : i[A]
+    };
+  });
+  var h = t.metaData, y = h.remoteEntry, w = y.path, g = y.name, I = y.type, M = h.types, S = h.buildInfo.buildVersion, E = h.globalName, D = t.exposes, b = {
+    version: c || "",
+    buildVersion: S,
+    globalName: E,
+    remoteEntry: simpleJoinRemoteEntry(w, g),
+    remoteEntryType: I,
+    remoteTypes: simpleJoinRemoteEntry(M.path, M.name),
+    remoteTypesZip: M.zip || "",
+    remoteTypesAPI: M.api || "",
+    remotesInfo: m,
+    shared: t == null ? void 0 : t.shared.map(function(A) {
+      return {
+        assets: A.assets,
+        sharedName: A.name
+      };
+    }),
+    modules: D == null ? void 0 : D.map(function(A) {
+      return {
+        moduleName: A.name,
+        modulePath: A.path,
+        assets: A.assets
+      };
+    })
+  };
+  if (!((r = t.metaData) === null || r === void 0) && r.prefetchInterface) {
+    var _ = t.metaData.prefetchInterface;
+    b = _object_spread_props(_object_spread$1({}, b), {
+      prefetchInterface: _
+    });
+  }
+  if (!((n = t.metaData) === null || n === void 0) && n.prefetchEntry) {
+    var v = t.metaData.prefetchEntry, k = v.path, U = v.name, q = v.type;
+    b = _object_spread_props(_object_spread$1({}, b), {
+      prefetchEntry: simpleJoinRemoteEntry(k, U),
+      prefetchEntryType: q
+    });
+  }
+  return "publicPath" in t.metaData ? l = _object_spread_props(_object_spread$1({}, b), {
+    publicPath: u()
+  }) : l = _object_spread_props(_object_spread$1({}, b), {
+    getPublicPath: u()
+  }), l;
+}
+function isManifestProvider(t) {
+  return !!("remoteEntry" in t && t.remoteEntry.includes(MANIFEST_EXT));
+}
+function asyncGeneratorStep$1(t, e, r, n, o, i, s) {
+  try {
+    var a = t[i](s), c = a.value;
+  } catch (l) {
+    r(l);
+    return;
+  }
+  a.done ? e(c) : Promise.resolve(c).then(n, o);
+}
+function _async_to_generator$1(t) {
+  return function() {
+    var e = this, r = arguments;
+    return new Promise(function(n, o) {
+      var i = t.apply(e, r);
+      function s(c) {
+        asyncGeneratorStep$1(i, n, o, s, a, "next", c);
+      }
+      function a(c) {
+        asyncGeneratorStep$1(i, n, o, s, a, "throw", c);
+      }
+      s(void 0);
+    });
+  };
+}
+function _instanceof(t, e) {
+  return e != null && typeof Symbol < "u" && e[Symbol.hasInstance] ? !!e[Symbol.hasInstance](t) : t instanceof e;
+}
+function _ts_generator$1(t, e) {
+  var r, n, o, i, s = {
+    label: 0,
+    sent: function() {
+      if (o[0] & 1)
+        throw o[1];
+      return o[1];
+    },
+    trys: [],
+    ops: []
+  };
+  return i = {
+    next: a(0),
+    throw: a(1),
+    return: a(2)
+  }, typeof Symbol == "function" && (i[Symbol.iterator] = function() {
+    return this;
+  }), i;
+  function a(l) {
+    return function(u) {
+      return c([
+        l,
+        u
+      ]);
+    };
+  }
+  function c(l) {
+    if (r)
+      throw new TypeError("Generator is already executing.");
+    for (; s; )
+      try {
+        if (r = 1, n && (o = l[0] & 2 ? n.return : l[0] ? n.throw || ((o = n.return) && o.call(n), 0) : n.next) && !(o = o.call(n, l[1])).done)
+          return o;
+        switch (n = 0, o && (l = [
+          l[0] & 2,
+          o.value
+        ]), l[0]) {
+          case 0:
+          case 1:
+            o = l;
+            break;
+          case 4:
+            return s.label++, {
+              value: l[1],
+              done: !1
+            };
+          case 5:
+            s.label++, n = l[1], l = [
+              0
+            ];
+            continue;
+          case 7:
+            l = s.ops.pop(), s.trys.pop();
+            continue;
+          default:
+            if (o = s.trys, !(o = o.length > 0 && o[o.length - 1]) && (l[0] === 6 || l[0] === 2)) {
+              s = 0;
+              continue;
+            }
+            if (l[0] === 3 && (!o || l[1] > o[0] && l[1] < o[3])) {
+              s.label = l[1];
+              break;
+            }
+            if (l[0] === 6 && s.label < o[1]) {
+              s.label = o[1], o = l;
+              break;
+            }
+            if (o && s.label < o[2]) {
+              s.label = o[2], s.ops.push(l);
+              break;
+            }
+            o[2] && s.ops.pop(), s.trys.pop();
+            continue;
+        }
+        l = e.call(t, s);
+      } catch (u) {
+        l = [
+          6,
+          u
+        ], n = 0;
+      } finally {
+        r = o = 0;
+      }
+    if (l[0] & 5)
+      throw l[1];
+    return {
+      value: l[0] ? l[1] : void 0,
+      done: !0
+    };
+  }
+}
+function safeWrapper(t, e) {
+  return _safeWrapper.apply(this, arguments);
+}
+function _safeWrapper() {
+  return _safeWrapper = _async_to_generator$1(function(t, e) {
+    var r, n;
+    return _ts_generator$1(this, function(o) {
+      switch (o.label) {
+        case 0:
+          return o.trys.push([
+            0,
+            2,
+            ,
+            3
+          ]), [
+            4,
+            t()
+          ];
+        case 1:
+          return r = o.sent(), [
+            2,
+            r
+          ];
+        case 2:
+          return n = o.sent(), !e && warn(n), [
+            2
+          ];
+        case 3:
+          return [
+            2
+          ];
+      }
+    });
+  }), _safeWrapper.apply(this, arguments);
+}
+function isStaticResourcesEqual(t, e) {
+  var r = /^(https?:)?\/\//i, n = t.replace(r, "").replace(/\/$/, ""), o = e.replace(r, "").replace(/\/$/, "");
+  return n === o;
+}
+function createScript(t, e, r, n) {
+  for (var o = null, i = !0, s = document.getElementsByTagName("script"), a = 0; a < s.length; a++) {
+    var c = s[a], l = c.getAttribute("src");
+    if (l && isStaticResourcesEqual(l, t)) {
+      o = c, i = !1;
+      break;
+    }
+  }
+  if (!o && (o = document.createElement("script"), o.type = "text/javascript", o.src = t, n)) {
+    var u = n(t);
+    _instanceof(u, HTMLScriptElement) && (o = u);
+  }
+  r && Object.keys(r).forEach(function(m) {
+    o && (m === "async" || m === "defer" ? o[m] = r[m] : o.setAttribute(m, r[m]));
+  });
+  var d = function(m, p) {
+    if (o && (o.onerror = null, o.onload = null, safeWrapper(function() {
+      o != null && o.parentNode && o.parentNode.removeChild(o);
+    }), m)) {
+      var h = m(p);
+      return e(), h;
+    }
+    e();
+  };
+  return o.onerror = d.bind(null, o.onerror), o.onload = d.bind(null, o.onload), {
+    script: o,
+    needAttach: i
+  };
+}
+function createLink(t, e) {
+  for (var r = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {}, n = arguments.length > 3 ? arguments[3] : void 0, o = null, i = !0, s = document.getElementsByTagName("link"), a = 0; a < s.length; a++) {
+    var c = s[a], l = c.getAttribute("href"), u = c.getAttribute("ref");
+    if (l && isStaticResourcesEqual(l, t) && u === r.ref) {
+      o = c, i = !1;
+      break;
+    }
+  }
+  if (!o && (o = document.createElement("link"), o.setAttribute("href", t), n)) {
+    var d = n(t);
+    _instanceof(d, HTMLLinkElement) && (o = d);
+  }
+  r && Object.keys(r).forEach(function(p) {
+    o && o.setAttribute(p, r[p]);
+  });
+  var m = function(p, h) {
+    if (o && (o.onerror = null, o.onload = null, safeWrapper(function() {
+      o != null && o.parentNode && o.parentNode.removeChild(o);
+    }), p)) {
+      var y = p(h);
+      return e(), y;
+    }
+    e();
+  };
+  return o.onerror = m.bind(null, o.onerror), o.onload = m.bind(null, o.onload), {
+    link: o,
+    needAttach: i
+  };
+}
+function loadScript(t, e) {
+  var r = e.attrs, n = e.createScriptHook;
+  return new Promise(function(o, i) {
+    var s = createScript(t, o, r, n), a = s.script, c = s.needAttach;
+    c && document.getElementsByTagName("head")[0].appendChild(a);
+  });
+}
+function _array_like_to_array(t, e) {
+  (e == null || e > t.length) && (e = t.length);
+  for (var r = 0, n = new Array(e); r < e; r++)
+    n[r] = t[r];
+  return n;
+}
+function _array_with_holes(t) {
+  if (Array.isArray(t))
+    return t;
+}
+function asyncGeneratorStep(t, e, r, n, o, i, s) {
+  try {
+    var a = t[i](s), c = a.value;
+  } catch (l) {
+    r(l);
+    return;
+  }
+  a.done ? e(c) : Promise.resolve(c).then(n, o);
+}
+function _async_to_generator(t) {
+  return function() {
+    var e = this, r = arguments;
+    return new Promise(function(n, o) {
+      var i = t.apply(e, r);
+      function s(c) {
+        asyncGeneratorStep(i, n, o, s, a, "next", c);
+      }
+      function a(c) {
+        asyncGeneratorStep(i, n, o, s, a, "throw", c);
+      }
+      s(void 0);
+    });
+  };
+}
+function _iterable_to_array_limit(t, e) {
+  var r = t == null ? null : typeof Symbol < "u" && t[Symbol.iterator] || t["@@iterator"];
+  if (r != null) {
+    var n = [], o = !0, i = !1, s, a;
+    try {
+      for (r = r.call(t); !(o = (s = r.next()).done) && (n.push(s.value), !(e && n.length === e)); o = !0)
+        ;
+    } catch (c) {
+      i = !0, a = c;
+    } finally {
+      try {
+        !o && r.return != null && r.return();
+      } finally {
+        if (i)
+          throw a;
+      }
+    }
+    return n;
+  }
+}
+function _non_iterable_rest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _sliced_to_array(t, e) {
+  return _array_with_holes(t) || _iterable_to_array_limit(t, e) || _unsupported_iterable_to_array(t, e) || _non_iterable_rest();
+}
+function _unsupported_iterable_to_array(t, e) {
+  if (t) {
+    if (typeof t == "string")
+      return _array_like_to_array(t, e);
+    var r = Object.prototype.toString.call(t).slice(8, -1);
+    if (r === "Object" && t.constructor && (r = t.constructor.name), r === "Map" || r === "Set")
+      return Array.from(r);
+    if (r === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r))
+      return _array_like_to_array(t, e);
+  }
+}
+function _ts_generator(t, e) {
+  var r, n, o, i, s = {
+    label: 0,
+    sent: function() {
+      if (o[0] & 1)
+        throw o[1];
+      return o[1];
+    },
+    trys: [],
+    ops: []
+  };
+  return i = {
+    next: a(0),
+    throw: a(1),
+    return: a(2)
+  }, typeof Symbol == "function" && (i[Symbol.iterator] = function() {
+    return this;
+  }), i;
+  function a(l) {
+    return function(u) {
+      return c([
+        l,
+        u
+      ]);
+    };
+  }
+  function c(l) {
+    if (r)
+      throw new TypeError("Generator is already executing.");
+    for (; s; )
+      try {
+        if (r = 1, n && (o = l[0] & 2 ? n.return : l[0] ? n.throw || ((o = n.return) && o.call(n), 0) : n.next) && !(o = o.call(n, l[1])).done)
+          return o;
+        switch (n = 0, o && (l = [
+          l[0] & 2,
+          o.value
+        ]), l[0]) {
+          case 0:
+          case 1:
+            o = l;
+            break;
+          case 4:
+            return s.label++, {
+              value: l[1],
+              done: !1
+            };
+          case 5:
+            s.label++, n = l[1], l = [
+              0
+            ];
+            continue;
+          case 7:
+            l = s.ops.pop(), s.trys.pop();
+            continue;
+          default:
+            if (o = s.trys, !(o = o.length > 0 && o[o.length - 1]) && (l[0] === 6 || l[0] === 2)) {
+              s = 0;
+              continue;
+            }
+            if (l[0] === 3 && (!o || l[1] > o[0] && l[1] < o[3])) {
+              s.label = l[1];
+              break;
+            }
+            if (l[0] === 6 && s.label < o[1]) {
+              s.label = o[1], o = l;
+              break;
+            }
+            if (o && s.label < o[2]) {
+              s.label = o[2], s.ops.push(l);
+              break;
+            }
+            o[2] && s.ops.pop(), s.trys.pop();
+            continue;
+        }
+        l = e.call(t, s);
+      } catch (u) {
+        l = [
+          6,
+          u
+        ], n = 0;
+      } finally {
+        r = o = 0;
+      }
+    if (l[0] & 5)
+      throw l[1];
+    return {
+      value: l[0] ? l[1] : void 0,
+      done: !0
+    };
+  }
+}
+function importNodeModule(t) {
+  if (!t)
+    throw new Error("import specifier is required");
+  var e = new Function("name", "return import(name)");
+  return e(t).then(function(r) {
+    return r.default;
+  }).catch(function(r) {
+    throw console.error("Error importing module ".concat(t, ":"), r), r;
+  });
+}
+function createScriptNode(url, cb, attrs, createScriptHook) {
+  if (createScriptHook) {
+    var hookResult = createScriptHook(url);
+    hookResult && typeof hookResult == "object" && "url" in hookResult && (url = hookResult.url);
+  }
+  var urlObj;
+  try {
+    urlObj = new URL(url);
+  } catch (t) {
+    console.error("Error constructing URL:", t), cb(new Error("Invalid URL: ".concat(t)));
+    return;
+  }
+  var getFetch = function() {
+    var t = _async_to_generator(function() {
+      var e;
+      return _ts_generator(this, function(r) {
+        switch (r.label) {
+          case 0:
+            return typeof fetch > "u" ? [
+              4,
+              importNodeModule("node-fetch")
+            ] : [
+              3,
+              2
+            ];
+          case 1:
+            return e = r.sent(), [
+              2,
+              (e == null ? void 0 : e.default) || e
+            ];
+          case 2:
+            return [
+              2,
+              fetch
+            ];
+          case 3:
+            return [
+              2
+            ];
+        }
+      });
+    });
+    return function() {
+      return t.apply(this, arguments);
+    };
+  }();
+  console.log("fetching", urlObj.href), getFetch().then(function(f) {
+    f(urlObj.href).then(function(t) {
+      return t.text();
+    }).then(function() {
+      var _ref = _async_to_generator(function(data) {
+        var _ref, path, vm, scriptContext, urlDirname, filename, script, exportedInterface, container;
+        return _ts_generator(this, function(_state) {
+          switch (_state.label) {
+            case 0:
+              return [
+                4,
+                Promise.all([
+                  importNodeModule("path"),
+                  importNodeModule("vm")
+                ])
+              ];
+            case 1:
+              _ref = _sliced_to_array.apply(void 0, [
+                _state.sent(),
+                2
+              ]), path = _ref[0], vm = _ref[1], scriptContext = {
+                exports: {},
+                module: {
+                  exports: {}
+                }
+              }, urlDirname = urlObj.pathname.split("/").slice(0, -1).join("/"), filename = path.basename(urlObj.pathname);
+              try {
+                if (script = new vm.Script("(function(exports, module, require, __dirname, __filename) {".concat(data, `
+})`), filename), script.runInThisContext()(scriptContext.exports, scriptContext.module, eval("require"), urlDirname, filename), exportedInterface = scriptContext.module.exports || scriptContext.exports, attrs && exportedInterface && attrs.globalName)
+                  return container = exportedInterface[attrs.globalName] || exportedInterface, cb(void 0, container), [
+                    2
+                  ];
+                cb(void 0, exportedInterface);
+              } catch (t) {
+                cb(new Error("Script execution error: ".concat(t)));
+              }
+              return [
+                2
+              ];
+          }
+        });
+      });
+      return function(t) {
+        return _ref.apply(this, arguments);
+      };
+    }()).catch(function(t) {
+      cb(t);
+    });
+  });
+}
+function loadScriptNode(t, e) {
+  return new Promise(function(r, n) {
+    createScriptNode(t, function(o, i) {
+      if (o)
+        n(o);
+      else {
+        var s, a, c = (e == null || (s = e.attrs) === null || s === void 0 ? void 0 : s.globalName) || "__FEDERATION_".concat(e == null || (a = e.attrs) === null || a === void 0 ? void 0 : a.name, ":custom__"), l = globalThis[c] = i;
+        r(l);
+      }
+    }, e.attrs, e.createScriptHook);
+  });
+}
+function matchRemoteWithNameAndExpose(t, e) {
+  for (const r of t) {
+    const n = e.startsWith(r.name);
+    let o = e.replace(r.name, "");
+    if (n) {
+      if (o.startsWith("/")) {
+        const a = r.name;
+        return o = `.${o}`, {
+          pkgNameOrAlias: a,
+          expose: o,
+          remote: r
+        };
+      } else if (o === "")
+        return {
+          pkgNameOrAlias: r.name,
+          expose: ".",
+          remote: r
+        };
+    }
+    const i = r.alias && e.startsWith(r.alias);
+    let s = r.alias && e.replace(r.alias, "");
+    if (r.alias && i) {
+      if (s && s.startsWith("/")) {
+        const a = r.alias;
+        return s = `.${s}`, {
+          pkgNameOrAlias: a,
+          expose: s,
+          remote: r
+        };
+      } else if (s === "")
+        return {
+          pkgNameOrAlias: r.alias,
+          expose: ".",
+          remote: r
+        };
+    }
+  }
+}
+function matchRemote(t, e) {
+  for (const r of t)
+    if (e === r.name || r.alias && e === r.alias)
+      return r;
+}
+function registerPlugins(t, e) {
+  const r = getGlobalHostPlugins();
+  r.length > 0 && r.forEach((n) => {
+    t != null && t.find((o) => o.name !== n.name) && t.push(n);
+  }), t && t.length > 0 && t.forEach((n) => {
+    e.forEach((o) => {
+      o.applyPlugin(n);
+    });
+  });
+}
+function _extends$5() {
+  return _extends$5 = Object.assign || function(t) {
+    for (var e = 1; e < arguments.length; e++) {
+      var r = arguments[e];
+      for (var n in r)
+        Object.prototype.hasOwnProperty.call(r, n) && (t[n] = r[n]);
+    }
+    return t;
+  }, _extends$5.apply(this, arguments);
+}
+async function loadEsmEntry({ entry: t, remoteEntryExports: e }) {
+  return new Promise((r, n) => {
+    try {
+      e ? r(e) : new Function("callbacks", `import("${t}").then(callbacks[0]).catch(callbacks[1])`)([
+        r,
+        n
+      ]);
+    } catch (o) {
+      n(o);
+    }
+  });
+}
+async function loadEntryScript({ name: t, globalName: e, entry: r, createScriptHook: n }) {
+  const { entryExports: o } = getRemoteEntryExports(t, e);
+  return o || (typeof document > "u" ? loadScriptNode(r, {
+    attrs: {
+      name: t,
+      globalName: e
+    },
+    createScriptHook: n
+  }).then(() => {
+    const { remoteEntryKey: i, entryExports: s } = getRemoteEntryExports(t, e);
+    return assert(s, `
+        Unable to use the ${t}'s '${r}' URL with ${i}'s globalName to get remoteEntry exports.
+        Possible reasons could be:
+
+        1. '${r}' is not the correct URL, or the remoteEntry resource or name is incorrect.
+
+        2. ${i} cannot be used to get remoteEntry exports in the window object.
+      `), s;
+  }).catch((i) => i) : loadScript(r, {
+    attrs: {},
+    createScriptHook: n
+  }).then(() => {
+    const { remoteEntryKey: i, entryExports: s } = getRemoteEntryExports(t, e);
+    return assert(s, `
+      Unable to use the ${t}'s '${r}' URL with ${i}'s globalName to get remoteEntry exports.
+      Possible reasons could be:
+
+      1. '${r}' is not the correct URL, or the remoteEntry resource or name is incorrect.
+
+      2. ${i} cannot be used to get remoteEntry exports in the window object.
+    `), s;
+  }).catch((i) => i));
+}
+function getRemoteEntryUniqueKey(t) {
+  const { entry: e, name: r } = t;
+  return composeKeyWithSeparator(r, e);
+}
+async function getRemoteEntry({ remoteEntryExports: t, remoteInfo: e, createScriptHook: r }) {
+  const { entry: n, name: o, type: i, entryGlobalName: s } = e, a = getRemoteEntryUniqueKey(e);
+  return t || (globalLoading[a] || (i === "esm" ? globalLoading[a] = loadEsmEntry({
+    entry: n,
+    remoteEntryExports: t
+  }) : globalLoading[a] = loadEntryScript({
+    name: o,
+    globalName: s,
+    entry: n,
+    createScriptHook: r
+  })), globalLoading[a]);
+}
+function getRemoteInfo(t) {
+  return _extends$5({}, t, {
+    entry: "entry" in t ? t.entry : "",
+    type: t.type || DEFAULT_REMOTE_TYPE,
+    entryGlobalName: t.entryGlobalName || t.name,
+    shareScope: t.shareScope || DEFAULT_SCOPE
+  });
+}
+function _extends$4() {
+  return _extends$4 = Object.assign || function(t) {
+    for (var e = 1; e < arguments.length; e++) {
+      var r = arguments[e];
+      for (var n in r)
+        Object.prototype.hasOwnProperty.call(r, n) && (t[n] = r[n]);
+    }
+    return t;
+  }, _extends$4.apply(this, arguments);
+}
+let Module = class {
+  async getEntry() {
+    if (this.remoteEntryExports)
+      return this.remoteEntryExports;
+    const t = await getRemoteEntry({
+      remoteInfo: this.remoteInfo,
+      remoteEntryExports: this.remoteEntryExports,
+      createScriptHook: (e) => {
+        const r = this.host.loaderHook.lifecycle.createScript.emit({
+          url: e
+        });
+        if (typeof document > "u" || r instanceof HTMLScriptElement)
+          return r;
+      }
+    });
+    return assert(t, `remoteEntryExports is undefined 
+ ${safeToString$1(this.remoteInfo)}`), this.remoteEntryExports = t, this.remoteEntryExports;
+  }
+  async get(t, e) {
+    const { loadFactory: r = !0 } = e || {
+      loadFactory: !0
+    }, n = await this.getEntry();
+    if (!this.inited) {
+      const i = this.host.shareScopeMap, s = this.remoteInfo.shareScope || "default";
+      i[s] || (i[s] = {});
+      const a = i[s], c = [], l = {
+        version: this.remoteInfo.version || ""
+      };
+      Object.defineProperty(l, "hostId", {
+        value: this.host.options.id || this.host.name,
+        enumerable: !1
+      });
+      const u = await this.host.hooks.lifecycle.beforeInitContainer.emit({
+        shareScope: a,
+        remoteEntryInitOptions: l,
+        initScope: c,
+        remoteInfo: this.remoteInfo,
+        origin: this.host
+      });
+      await n.init(u.shareScope, u.initScope, u.remoteEntryInitOptions), await this.host.hooks.lifecycle.initContainer.emit(_extends$4({}, u, {
+        remoteEntryExports: n
+      }));
+    }
+    this.lib = n, this.inited = !0;
+    const o = await n.get(t);
+    return assert(o, `${getFMId(this.remoteInfo)} remote don't export ${t}.`), r ? await o() : o;
+  }
+  constructor({ remoteInfo: t, host: e }) {
+    this.inited = !1, this.lib = void 0, this.remoteInfo = t, this.host = e;
+  }
+};
+class SyncHook {
+  on(e) {
+    typeof e == "function" && this.listeners.add(e);
+  }
+  once(e) {
+    const r = this;
+    this.on(function n(...o) {
+      return r.remove(n), e.apply(null, o);
+    });
+  }
+  emit(...e) {
+    let r;
+    return this.listeners.size > 0 && this.listeners.forEach((n) => {
+      r = n(...e);
+    }), r;
+  }
+  remove(e) {
+    this.listeners.delete(e);
+  }
+  removeAll() {
+    this.listeners.clear();
+  }
+  constructor(e) {
+    this.type = "", this.listeners = /* @__PURE__ */ new Set(), e && (this.type = e);
+  }
+}
+class AsyncHook extends SyncHook {
+  emit(...e) {
+    let r;
+    const n = Array.from(this.listeners);
+    if (n.length > 0) {
+      let o = 0;
+      const i = (s) => s === !1 ? !1 : o < n.length ? Promise.resolve(n[o++].apply(null, e)).then(i) : s;
+      r = i();
+    }
+    return Promise.resolve(r);
+  }
+}
+function checkReturnData(t, e) {
+  if (!isObject(e))
+    return !1;
+  if (t !== e) {
+    for (const r in t)
+      if (!(r in e))
+        return !1;
+  }
+  return !0;
+}
+class SyncWaterfallHook extends SyncHook {
+  emit(e) {
+    isObject(e) || error(`The data for the "${this.type}" hook should be an object.`);
+    for (const r of this.listeners)
+      try {
+        const n = r(e);
+        if (checkReturnData(e, n))
+          e = n;
+        else {
+          this.onerror(`A plugin returned an unacceptable value for the "${this.type}" type.`);
+          break;
+        }
+      } catch (n) {
+        warn$1(n), this.onerror(n);
+      }
+    return e;
+  }
+  constructor(e) {
+    super(), this.onerror = error, this.type = e;
+  }
+}
+class AsyncWaterfallHook extends SyncHook {
+  emit(e) {
+    isObject(e) || error(`The response data for the "${this.type}" hook must be an object.`);
+    const r = Array.from(this.listeners);
+    if (r.length > 0) {
+      let n = 0;
+      const o = (s) => (warn$1(s), this.onerror(s), e), i = (s) => {
+        if (checkReturnData(e, s)) {
+          if (e = s, n < r.length)
+            try {
+              return Promise.resolve(r[n++](e)).then(i, o);
+            } catch (a) {
+              return o(a);
+            }
+        } else
+          this.onerror(`A plugin returned an incorrect value for the "${this.type}" type.`);
+        return e;
+      };
+      return Promise.resolve(i(e));
+    }
+    return Promise.resolve(e);
+  }
+  constructor(e) {
+    super(), this.onerror = error, this.type = e;
+  }
+}
+class PluginSystem {
+  applyPlugin(e) {
+    assert(isPlainObject(e), "Plugin configuration is invalid.");
+    const r = e.name;
+    assert(r, "A name must be provided by the plugin."), this.registerPlugins[r] || (this.registerPlugins[r] = e, Object.keys(this.lifecycle).forEach((n) => {
+      const o = e[n];
+      o && this.lifecycle[n].on(o);
+    }));
+  }
+  removePlugin(e) {
+    assert(e, "A name is required.");
+    const r = this.registerPlugins[e];
+    assert(r, `The plugin "${e}" is not registered.`), Object.keys(r).forEach((n) => {
+      n !== "name" && this.lifecycle[n].remove(r[n]);
+    });
+  }
+  inherit({ lifecycle: e, registerPlugins: r }) {
+    Object.keys(e).forEach((n) => {
+      assert(!this.lifecycle[n], `The hook "${n}" has a conflict and cannot be inherited.`), this.lifecycle[n] = e[n];
+    }), Object.keys(r).forEach((n) => {
+      assert(!this.registerPlugins[n], `The plugin "${n}" has a conflict and cannot be inherited.`), this.applyPlugin(r[n]);
+    });
+  }
+  constructor(e) {
+    this.registerPlugins = {}, this.lifecycle = e, this.lifecycleKeys = Object.keys(e);
+  }
+}
+function _extends$3() {
+  return _extends$3 = Object.assign || function(t) {
+    for (var e = 1; e < arguments.length; e++) {
+      var r = arguments[e];
+      for (var n in r)
+        Object.prototype.hasOwnProperty.call(r, n) && (t[n] = r[n]);
+    }
+    return t;
+  }, _extends$3.apply(this, arguments);
+}
+function defaultPreloadArgs(t) {
+  return _extends$3({
+    resourceCategory: "sync",
+    share: !0,
+    depsRemote: !0,
+    prefetchInterface: !1
+  }, t);
+}
+function formatPreloadArgs(t, e) {
+  return e.map((r) => {
+    const n = matchRemote(t, r.nameOrAlias);
+    return assert(n, `Unable to preload ${r.nameOrAlias} as it is not included in ${!n && safeToString$1({
+      remoteInfo: n,
+      remotes: t
+    })}`), {
+      remote: n,
+      preloadConfig: defaultPreloadArgs(r)
+    };
+  });
+}
+function normalizePreloadExposes(t) {
+  return t ? t.map((e) => e === "." ? e : e.startsWith("./") ? e.replace("./", "") : e) : [];
+}
+function preloadAssets(t, e, r) {
+  const { cssAssets: n, jsAssetsWithoutEntry: o, entryAssets: i } = r;
+  if (e.options.inBrowser) {
+    i.forEach((a) => {
+      const { moduleInfo: c } = a, l = e.moduleCache.get(t.name);
+      getRemoteEntry(l ? {
+        remoteInfo: c,
+        remoteEntryExports: l.remoteEntryExports,
+        createScriptHook: (u) => {
+          const d = e.loaderHook.lifecycle.createScript.emit({
+            url: u
+          });
+          if (d instanceof HTMLScriptElement)
+            return d;
+        }
+      } : {
+        remoteInfo: c,
+        remoteEntryExports: void 0,
+        createScriptHook: (u) => {
+          const d = e.loaderHook.lifecycle.createScript.emit({
+            url: u
+          });
+          if (d instanceof HTMLScriptElement)
+            return d;
+        }
+      });
+    });
+    const s = document.createDocumentFragment();
+    n.forEach((a) => {
+      const { link: c, needAttach: l } = createLink(a, () => {
+      }, {
+        rel: "preload",
+        as: "style"
+      }, (u) => {
+        const d = e.loaderHook.lifecycle.createLink.emit({
+          url: u
+        });
+        if (d instanceof HTMLLinkElement)
+          return d;
+      });
+      l && s.appendChild(c);
+    }), o.forEach((a) => {
+      const { link: c, needAttach: l } = createLink(a, () => {
+      }, {
+        rel: "preload",
+        as: "script"
+      }, (u) => {
+        const d = e.loaderHook.lifecycle.createLink.emit({
+          url: u
+        });
+        if (d instanceof HTMLLinkElement)
+          return d;
+      });
+      l && document.head.appendChild(c);
+    }), document.head.appendChild(s);
+  }
+}
+function _extends$2() {
+  return _extends$2 = Object.assign || function(t) {
+    for (var e = 1; e < arguments.length; e++) {
+      var r = arguments[e];
+      for (var n in r)
+        Object.prototype.hasOwnProperty.call(r, n) && (t[n] = r[n]);
+    }
+    return t;
+  }, _extends$2.apply(this, arguments);
+}
+function assignRemoteInfo(t, e) {
+  (!("remoteEntry" in e) || !e.remoteEntry) && error(`The attribute remoteEntry of ${name} must not be undefined.`);
+  const { remoteEntry: r } = e, n = getResourceUrl(e, r);
+  t.type = e.remoteEntryType, t.entryGlobalName = e.globalName, t.entry = n, t.version = e.version, t.buildVersion = e.buildVersion;
+}
+function snapshotPlugin() {
+  return {
+    name: "snapshot-plugin",
+    async afterResolve(t) {
+      const { remote: e, pkgNameOrAlias: r, expose: n, origin: o, remoteInfo: i } = t;
+      if (!isRemoteInfoWithEntry(e) || !isPureRemoteEntry(e)) {
+        const { remoteSnapshot: s, globalSnapshot: a } = await o.snapshotHandler.loadRemoteSnapshotInfo(e);
+        assignRemoteInfo(i, s);
+        const c = {
+          remote: e,
+          preloadConfig: {
+            nameOrAlias: r,
+            exposes: [
+              n
+            ],
+            resourceCategory: "sync",
+            share: !1,
+            depsRemote: !1
+          }
+        }, l = await o.hooks.lifecycle.generatePreloadAssets.emit({
+          origin: o,
+          preloadOptions: c,
+          remoteInfo: i,
+          remote: e,
+          remoteSnapshot: s,
+          globalSnapshot: a
+        });
+        return l && preloadAssets(i, o, l), _extends$2({}, t, {
+          remoteSnapshot: s
+        });
+      }
+      return t;
+    }
+  };
+}
+function splitId(t) {
+  const e = t.split(":");
+  return e.length === 1 ? {
+    name: e[0],
+    version: void 0
+  } : e.length === 2 ? {
+    name: e[0],
+    version: e[1]
+  } : {
+    name: e[1],
+    version: e[2]
+  };
+}
+function traverseModuleInfo(t, e, r, n, o = {}, i) {
+  const s = getFMId(e), { value: a } = getInfoWithoutType(t, s), c = i || a;
+  if (c && !isManifestProvider(c) && (r(c, e, n), c.remotesInfo)) {
+    const l = Object.keys(c.remotesInfo);
+    for (const u of l) {
+      if (o[u])
+        continue;
+      o[u] = !0;
+      const d = splitId(u), m = c.remotesInfo[u];
+      traverseModuleInfo(t, {
+        name: d.name,
+        version: m.matchedVersion
+      }, r, !1, o, void 0);
+    }
+  }
+}
+function generatePreloadAssets(t, e, r, n, o) {
+  const i = [], s = [], a = [], c = /* @__PURE__ */ new Set(), l = /* @__PURE__ */ new Set(), { options: u } = t, { preloadConfig: d } = e, { depsRemote: m } = d;
+  traverseModuleInfo(n, r, (h, y, w) => {
+    let g;
+    if (w)
+      g = d;
+    else if (Array.isArray(m)) {
+      const b = m.find((_) => _.nameOrAlias === y.name || _.nameOrAlias === y.alias);
+      if (!b)
+        return;
+      g = defaultPreloadArgs(b);
+    } else if (m === !0)
+      g = d;
+    else
+      return;
+    const I = getResourceUrl(h, "remoteEntry" in h ? h.remoteEntry : "");
+    I && a.push({
+      name: y.name,
+      moduleInfo: {
+        name: y.name,
+        entry: I,
+        type: "remoteEntryType" in h ? h.remoteEntryType : "global",
+        entryGlobalName: "globalName" in h ? h.globalName : y.name,
+        shareScope: "",
+        version: "version" in h ? h.version : void 0
+      },
+      url: I
+    });
+    let M = "modules" in h ? h.modules : [];
+    const S = normalizePreloadExposes(g.exposes);
+    if (S.length && "modules" in h) {
+      var E;
+      M = h == null || (E = h.modules) == null ? void 0 : E.reduce((b, _) => ((S == null ? void 0 : S.indexOf(_.moduleName)) !== -1 && b.push(_), b), []);
+    }
+    function D(b) {
+      const _ = b.map((v) => getResourceUrl(h, v));
+      return g.filter ? _.filter(g.filter) : _;
+    }
+    if (M) {
+      const b = M.length;
+      for (let _ = 0; _ < b; _++) {
+        const v = M[_], k = `${y.name}/${v.moduleName}`;
+        t.hooks.lifecycle.handlePreloadModule.emit({
+          id: v.moduleName === "." ? y.name : k,
+          name: y.name,
+          remoteSnapshot: h,
+          preloadConfig: g,
+          remote: y,
+          origin: t
+        }), !getPreloaded(k) && (g.resourceCategory === "all" ? (i.push(...D(v.assets.css.async)), i.push(...D(v.assets.css.sync)), s.push(...D(v.assets.js.async)), s.push(...D(v.assets.js.sync))) : (g.resourceCategory = "sync") && (i.push(...D(v.assets.css.sync)), s.push(...D(v.assets.js.sync))), setPreloaded(k));
+      }
+    }
+  }, !0, {}, o), o.shared && o.shared.forEach((h) => {
+    var y;
+    const w = (y = u.shared) == null ? void 0 : y[h.sharedName];
+    if (!w)
+      return;
+    const g = getRegisteredShare(t.shareScopeMap, h.sharedName, w, t.hooks.lifecycle.resolveShare);
+    g && typeof g.lib == "function" && (h.assets.js.sync.forEach((I) => {
+      c.add(I);
+    }), h.assets.css.sync.forEach((I) => {
+      l.add(I);
+    }));
+  });
+  const p = s.filter((h) => !c.has(h));
+  return {
+    cssAssets: i.filter((h) => !l.has(h)),
+    jsAssetsWithoutEntry: p,
+    entryAssets: a
+  };
+}
+const generatePreloadAssetsPlugin = function() {
+  return {
+    name: "generate-preload-assets-plugin",
+    async generatePreloadAssets(t) {
+      const { origin: e, preloadOptions: r, remoteInfo: n, remote: o, globalSnapshot: i, remoteSnapshot: s } = t;
+      return isRemoteInfoWithEntry(o) && isPureRemoteEntry(o) ? {
+        cssAssets: [],
+        jsAssetsWithoutEntry: [],
+        entryAssets: [
+          {
+            name: o.name,
+            url: o.entry,
+            moduleInfo: {
+              name: n.name,
+              entry: o.entry,
+              type: "global",
+              entryGlobalName: "",
+              shareScope: ""
+            }
+          }
+        ]
+      } : (assignRemoteInfo(n, s), generatePreloadAssets(e, r, n, i, s));
+    }
+  };
+};
+function _extends$1() {
+  return _extends$1 = Object.assign || function(t) {
+    for (var e = 1; e < arguments.length; e++) {
+      var r = arguments[e];
+      for (var n in r)
+        Object.prototype.hasOwnProperty.call(r, n) && (t[n] = r[n]);
+    }
+    return t;
+  }, _extends$1.apply(this, arguments);
+}
+class SnapshotHandler {
+  async loadSnapshot(e) {
+    const { options: r } = this.HostInstance, { hostGlobalSnapshot: n, remoteSnapshot: o, globalSnapshot: i } = this.getGlobalRemoteInfo(e), { remoteSnapshot: s, globalSnapshot: a } = await this.hooks.lifecycle.loadSnapshot.emit({
+      options: r,
+      moduleInfo: e,
+      hostGlobalSnapshot: n,
+      remoteSnapshot: o,
+      globalSnapshot: i
+    });
+    return {
+      remoteSnapshot: s,
+      globalSnapshot: a
+    };
+  }
+  async loadRemoteSnapshotInfo(e) {
+    const { options: r } = this.HostInstance;
+    await this.hooks.lifecycle.beforeLoadRemoteSnapshot.emit({
+      options: r,
+      moduleInfo: e
+    });
+    let n = getGlobalSnapshotInfoByModuleInfo({
+      name: this.HostInstance.options.name,
+      version: this.HostInstance.options.version
+    });
+    n || (n = {
+      version: this.HostInstance.options.version || "",
+      remoteEntry: "",
+      remotesInfo: {}
+    }, addGlobalSnapshot({
+      [this.HostInstance.options.name]: n
+    })), n && "remotesInfo" in n && !getInfoWithoutType(n.remotesInfo, e.name).value && ("version" in e || "entry" in e) && (n.remotesInfo = _extends$1({}, n == null ? void 0 : n.remotesInfo, {
+      [e.name]: {
+        matchedVersion: "version" in e ? e.version : e.entry
+      }
+    }));
+    const { hostGlobalSnapshot: o, remoteSnapshot: i, globalSnapshot: s } = this.getGlobalRemoteInfo(e), { remoteSnapshot: a, globalSnapshot: c } = await this.hooks.lifecycle.loadSnapshot.emit({
+      options: r,
+      moduleInfo: e,
+      hostGlobalSnapshot: o,
+      remoteSnapshot: i,
+      globalSnapshot: s
+    });
+    if (a)
+      if (isManifestProvider(a)) {
+        const l = await this.getManifestJson(a.remoteEntry, e, {}), u = setGlobalSnapshotInfoByModuleInfo(_extends$1({}, e, {
+          entry: a.remoteEntry
+        }), l);
+        return {
+          remoteSnapshot: l,
+          globalSnapshot: u
+        };
+      } else {
+        const { remoteSnapshot: l } = await this.hooks.lifecycle.loadRemoteSnapshot.emit({
+          options: this.HostInstance.options,
+          moduleInfo: e,
+          remoteSnapshot: a,
+          from: "global"
+        });
+        return {
+          remoteSnapshot: l,
+          globalSnapshot: c
+        };
+      }
+    else if (isRemoteInfoWithEntry(e)) {
+      const l = await this.getManifestJson(e.entry, e, {}), u = setGlobalSnapshotInfoByModuleInfo(e, l), { remoteSnapshot: d } = await this.hooks.lifecycle.loadRemoteSnapshot.emit({
+        options: this.HostInstance.options,
+        moduleInfo: e,
+        remoteSnapshot: l,
+        from: "global"
+      });
+      return {
+        remoteSnapshot: d,
+        globalSnapshot: u
+      };
+    } else
+      error(`
+          Cannot get remoteSnapshot with the name: '${e.name}', version: '${e.version}' from __FEDERATION__.moduleInfo. The following reasons may be causing the problem:
+
+          1. The Deploy platform did not deliver the correct data. You can use __FEDERATION__.moduleInfo to check the remoteInfo.
+
+          2. The remote '${e.name}' version '${e.version}' is not released.
+
+          The transformed module info: ${JSON.stringify(c)}
+        `);
+  }
+  getGlobalRemoteInfo(e) {
+    const r = getGlobalSnapshotInfoByModuleInfo({
+      name: this.HostInstance.options.name,
+      version: this.HostInstance.options.version
+    }), n = r && "remotesInfo" in r && r.remotesInfo && getInfoWithoutType(r.remotesInfo, e.name).value;
+    return n && n.matchedVersion ? {
+      hostGlobalSnapshot: r,
+      globalSnapshot: getGlobalSnapshot(),
+      remoteSnapshot: getGlobalSnapshotInfoByModuleInfo({
+        name: e.name,
+        version: n.matchedVersion
+      })
+    } : {
+      hostGlobalSnapshot: void 0,
+      globalSnapshot: getGlobalSnapshot(),
+      remoteSnapshot: getGlobalSnapshotInfoByModuleInfo({
+        name: e.name,
+        version: "version" in e ? e.version : void 0
+      })
+    };
+  }
+  async getManifestJson(e, r, n) {
+    const o = async () => {
+      let s = this.manifestCache.get(e);
+      if (s)
+        return s;
+      try {
+        let a = await this.loaderHook.lifecycle.fetch.emit(e, {});
+        return (!a || !(a instanceof Response)) && (a = await fetch(e, {})), s = await a.json(), assert(s.metaData && s.exposes && s.shared, `${e} is not a federation manifest`), this.manifestCache.set(e, s), s;
+      } catch (a) {
+        error(`Failed to get manifestJson for ${r.name}. The manifest URL is ${e}. Please ensure that the manifestUrl is accessible.
+          
+ Error message:
+          
+ ${a}`);
+      }
+    }, i = async () => {
+      const s = await o(), a = generateSnapshotFromManifest(s, {
+        version: e
+      }), { remoteSnapshot: c } = await this.hooks.lifecycle.loadRemoteSnapshot.emit({
+        options: this.HostInstance.options,
+        moduleInfo: r,
+        manifestJson: s,
+        remoteSnapshot: a,
+        manifestUrl: e,
+        from: "manifest"
+      });
+      return c;
+    };
+    return this.manifestLoading[e] || (this.manifestLoading[e] = i().then((s) => s)), this.manifestLoading[e];
+  }
+  constructor(e) {
+    this.loadingHostSnapshot = null, this.manifestCache = /* @__PURE__ */ new Map(), this.hooks = new PluginSystem({
+      beforeLoadRemoteSnapshot: new AsyncHook("beforeLoadRemoteSnapshot"),
+      loadSnapshot: new AsyncWaterfallHook("loadGlobalSnapshot"),
+      loadRemoteSnapshot: new AsyncWaterfallHook("loadRemoteSnapshot")
+    }), this.manifestLoading = Global.__FEDERATION__.__MANIFEST_LOADING__, this.HostInstance = e, this.loaderHook = e.loaderHook;
+  }
+}
+function _extends() {
+  return _extends = Object.assign || function(t) {
+    for (var e = 1; e < arguments.length; e++) {
+      var r = arguments[e];
+      for (var n in r)
+        Object.prototype.hasOwnProperty.call(r, n) && (t[n] = r[n]);
+    }
+    return t;
+  }, _extends.apply(this, arguments);
+}
+function _object_without_properties_loose(t, e) {
+  if (t == null)
+    return {};
+  var r = {}, n = Object.keys(t), o, i;
+  for (i = 0; i < n.length; i++)
+    o = n[i], !(e.indexOf(o) >= 0) && (r[o] = t[o]);
+  return r;
+}
+class FederationHost {
+  _setGlobalShareScopeMap() {
+    const e = getGlobalShareScope(), r = this.options.id || this.options.name;
+    r && !e[r] && (e[r] = this.shareScopeMap);
+  }
+  initOptions(e) {
+    this.registerPlugins(e.plugins);
+    const r = this.formatOptions(this.options, e);
+    return this.options = r, r;
+  }
+  async loadShare(e, r) {
+    var n;
+    const o = Object.assign({}, (n = this.options.shared) == null ? void 0 : n[e], r);
+    o != null && o.scope && await Promise.all(o.scope.map(async (l) => {
+      await Promise.all(this.initializeSharing(l, o.strategy));
+    }));
+    const i = await this.hooks.lifecycle.beforeLoadShare.emit({
+      pkgName: e,
+      shareInfo: o,
+      shared: this.options.shared,
+      origin: this
+    }), { shareInfo: s } = i;
+    assert(s, `Cannot find ${e} Share in the ${this.options.name}. Please ensure that the ${e} Share parameters have been injected`);
+    const a = getRegisteredShare(this.shareScopeMap, e, s, this.hooks.lifecycle.resolveShare), c = (l) => {
+      l.useIn || (l.useIn = []), addUniqueItem(l.useIn, this.options.name);
+    };
+    if (a && a.lib)
+      return c(a), a.lib;
+    if (a && a.loading && !a.loaded) {
+      const l = await a.loading;
+      return a.loaded = !0, a.lib || (a.lib = l), c(a), l;
+    } else if (a) {
+      const l = (async () => {
+        const u = await a.get();
+        s.lib = u, s.loaded = !0, c(s);
+        const d = getRegisteredShare(this.shareScopeMap, e, s, this.hooks.lifecycle.resolveShare);
+        return d && (d.lib = u, d.loaded = !0), u;
+      })();
+      return this.setShared({
+        pkgName: e,
+        loaded: !1,
+        shared: a,
+        from: this.options.name,
+        lib: null,
+        loading: l
+      }), l;
+    } else {
+      if (r)
+        return !1;
+      const l = (async () => {
+        const u = await s.get();
+        s.lib = u, s.loaded = !0, c(s);
+        const d = getRegisteredShare(this.shareScopeMap, e, s, this.hooks.lifecycle.resolveShare);
+        return d && (d.lib = u, d.loaded = !0), u;
+      })();
+      return this.setShared({
+        pkgName: e,
+        loaded: !1,
+        shared: s,
+        from: this.options.name,
+        lib: null,
+        loading: l
+      }), l;
+    }
+  }
+  loadShareSync(e, r) {
+    var n;
+    const o = Object.assign({}, (n = this.options.shared) == null ? void 0 : n[e], r);
+    o != null && o.scope && o.scope.forEach((a) => {
+      this.initializeSharing(a, o.strategy);
+    });
+    const i = getRegisteredShare(this.shareScopeMap, e, o, this.hooks.lifecycle.resolveShare), s = (a) => {
+      a.useIn || (a.useIn = []), addUniqueItem(a.useIn, this.options.name);
+    };
+    if (i) {
+      if (typeof i.lib == "function")
+        return s(i), i.loaded || (i.loaded = !0, i.from === this.options.name && (o.loaded = !0)), i.lib;
+      if (typeof i.get == "function") {
+        const a = i.get();
+        if (!(a instanceof Promise))
+          return s(i), this.setShared({
+            pkgName: e,
+            loaded: !0,
+            from: this.options.name,
+            lib: a,
+            shared: i
+          }), a;
+      }
+    }
+    if (o.lib)
+      return o.loaded || (o.loaded = !0), o.lib;
+    if (o.get) {
+      const a = o.get();
+      if (a instanceof Promise)
+        throw new Error(`
+        The loadShareSync function was unable to load ${e}. The ${e} could not be found in ${this.options.name}.
+        Possible reasons for failure: 
+
+        1. The ${e} share was registered with the 'get' attribute, but loadShare was not used beforehand.
+
+        2. The ${e} share was not registered with the 'lib' attribute.
+
+      `);
+      return o.lib = a, this.setShared({
+        pkgName: e,
+        loaded: !0,
+        from: this.options.name,
+        lib: o.lib,
+        shared: o
+      }), o.lib;
+    }
+    throw new Error(`
+        The loadShareSync function was unable to load ${e}. The ${e} could not be found in ${this.options.name}.
+        Possible reasons for failure: 
+
+        1. The ${e} share was registered with the 'get' attribute, but loadShare was not used beforehand.
+
+        2. The ${e} share was not registered with the 'lib' attribute.
+
+      `);
+  }
+  initRawContainer(e, r, n) {
+    const o = getRemoteInfo({
+      name: e,
+      entry: r
+    }), i = new Module({
+      host: this,
+      remoteInfo: o
+    });
+    return i.remoteEntryExports = n, this.moduleCache.set(e, i), i;
+  }
+  async _getRemoteModuleAndOptions(e) {
+    const r = await this.hooks.lifecycle.beforeRequest.emit({
+      id: e,
+      options: this.options,
+      origin: this
+    }), { id: n } = r, o = matchRemoteWithNameAndExpose(this.options.remotes, n);
+    assert(o, `
+        Unable to locate ${n} in ${this.options.name}. Potential reasons for failure include:
+
+        1. ${n} was not included in the 'remotes' parameter of ${this.options.name || "the host"}.
+
+        2. ${n} could not be found in the 'remotes' of ${this.options.name} with either 'name' or 'alias' attributes.
+        3. ${n} is not online, injected, or loaded.
+        4. ${n}  cannot be accessed on the expected.
+        5. The 'beforeRequest' hook was provided but did not return the correct 'remoteInfo' when attempting to load ${n}.
+      `);
+    const { remote: i } = o, s = getRemoteInfo(i), a = await this.hooks.lifecycle.afterResolve.emit(_extends({
+      id: n
+    }, o, {
+      options: this.options,
+      origin: this,
+      remoteInfo: s
+    })), { remote: c, expose: l } = a;
+    assert(c && l, `The 'beforeRequest' hook was executed, but it failed to return the correct 'remote' and 'expose' values while loading ${n}.`);
+    let u = this.moduleCache.get(c.name);
+    const d = {
+      host: this,
+      remoteInfo: s
+    };
+    return u || (u = new Module(d), this.moduleCache.set(c.name, u)), {
+      module: u,
+      moduleOptions: d,
+      remoteMatchInfo: a
+    };
+  }
+  async loadRemote(e, r) {
+    try {
+      const { loadFactory: n = !0 } = r || {
+        loadFactory: !0
+      }, { module: o, moduleOptions: i, remoteMatchInfo: s } = await this._getRemoteModuleAndOptions(e), { pkgNameOrAlias: a, remote: c, expose: l, id: u } = s, d = await o.get(l, r), m = await this.hooks.lifecycle.onLoad.emit({
+        id: u,
+        pkgNameOrAlias: a,
+        expose: l,
+        exposeModule: n ? d : void 0,
+        exposeModuleFactory: n ? void 0 : d,
+        remote: c,
+        options: i,
+        moduleInstance: o,
+        origin: this
+      });
+      return typeof m == "function" ? m : d;
+    } catch (n) {
+      const { from: o = "runtime" } = r || {
+        from: "runtime"
+      }, i = await this.hooks.lifecycle.errorLoadRemote.emit({
+        id: e,
+        error: n,
+        from: o,
+        origin: this
+      });
+      if (!i)
+        throw n;
+      return i;
+    }
+  }
+  async preloadRemote(e) {
+    await this.hooks.lifecycle.beforePreloadRemote.emit({
+      preloadOptions: e,
+      options: this.options,
+      origin: this
+    });
+    const r = formatPreloadArgs(this.options.remotes, e);
+    await Promise.all(r.map(async (n) => {
+      const { remote: o } = n, i = getRemoteInfo(o), { globalSnapshot: s, remoteSnapshot: a } = await this.snapshotHandler.loadRemoteSnapshotInfo(o), c = await this.hooks.lifecycle.generatePreloadAssets.emit({
+        origin: this,
+        preloadOptions: n,
+        remote: o,
+        remoteInfo: i,
+        globalSnapshot: s,
+        remoteSnapshot: a
+      });
+      !c || preloadAssets(i, this, c);
+    }));
+  }
+  initializeSharing(e = DEFAULT_SCOPE, r) {
+    const n = this.shareScopeMap, o = this.options.name;
+    n[e] || (n[e] = {});
+    const i = n[e], s = (u, d) => {
+      var m;
+      const { version: p, eager: h } = d;
+      i[u] = i[u] || {};
+      const y = i[u], w = y[p], g = Boolean(w && (w.eager || ((m = w.shareConfig) == null ? void 0 : m.eager)));
+      (!w || w.strategy !== "loaded-first" && !w.loaded && (Boolean(!h) !== !g ? h : o > w.from)) && (y[p] = d);
+    }, a = [], c = (u) => u && u.init && u.init(n[e]), l = async (u) => {
+      const { module: d } = await this._getRemoteModuleAndOptions(u);
+      if (d.getEntry) {
+        const m = await d.getEntry();
+        d.inited || (c(m), d.inited = !0);
+      }
+    };
+    return Object.keys(this.options.shared).forEach((u) => {
+      const d = this.options.shared[u];
+      d.scope.includes(e) && s(u, d);
+    }), r === "version-first" && this.options.remotes.forEach((u) => {
+      u.shareScope === e && a.push(l(u.name));
+    }), a;
+  }
+  initShareScopeMap(e, r) {
+    this.shareScopeMap[e] = r, this.hooks.lifecycle.initContainerShareScopeMap.emit({
+      shareScope: r,
+      options: this.options,
+      origin: this
+    });
+  }
+  formatOptions(e, r) {
+    const n = formatShareConfigs(r.shared || {}, r.name), o = _extends({}, e.shared, n), { userOptions: i, options: s } = this.hooks.lifecycle.beforeInit.emit({
+      origin: this,
+      userOptions: r,
+      options: e,
+      shareInfo: o
+    }), a = (i.remotes || []).reduce((u, d) => (this.registerRemote(d, u, {
+      force: !1
+    }), u), s.remotes);
+    Object.keys(n).forEach((u) => {
+      const d = n[u];
+      !getRegisteredShare(this.shareScopeMap, u, d, this.hooks.lifecycle.resolveShare) && d && d.lib && this.setShared({
+        pkgName: u,
+        lib: d.lib,
+        get: d.get,
+        loaded: !0,
+        shared: d,
+        from: r.name
+      });
+    });
+    const c = [
+      ...s.plugins
+    ];
+    i.plugins && i.plugins.forEach((u) => {
+      c.includes(u) || c.push(u);
+    });
+    const l = _extends({}, e, r, {
+      plugins: c,
+      remotes: a,
+      shared: o
+    });
+    return this.hooks.lifecycle.init.emit({
+      origin: this,
+      options: l
+    }), l;
+  }
+  registerPlugins(e) {
+    registerPlugins(e, [
+      this.hooks,
+      this.snapshotHandler.hooks,
+      this.loaderHook
+    ]);
+  }
+  setShared({ pkgName: e, shared: r, from: n, lib: o, loading: i, loaded: s, get: a }) {
+    const { version: c, scope: l = "default" } = r, u = _object_without_properties_loose(r, [
+      "version",
+      "scope"
+    ]);
+    (Array.isArray(l) ? l : [
+      l
+    ]).forEach((d) => {
+      this.shareScopeMap[d] || (this.shareScopeMap[d] = {}), this.shareScopeMap[d][e] || (this.shareScopeMap[d][e] = {}), !this.shareScopeMap[d][e][c] && (this.shareScopeMap[d][e][c] = _extends({
+        version: c,
+        scope: [
+          "default"
+        ]
+      }, u, {
+        lib: o,
+        loaded: s,
+        loading: i
+      }), a && (this.shareScopeMap[d][e][c].get = a));
+    });
+  }
+  removeRemote(e) {
+    const { name: r } = e, n = this.options.remotes.findIndex((i) => i.name === r);
+    n !== -1 && this.options.remotes.splice(n, 1);
+    const o = this.moduleCache.get(e.name);
+    if (o) {
+      const i = o.remoteInfo.entryGlobalName;
+      globalThis[i] && delete globalThis[i];
+      const s = getRemoteEntryUniqueKey(o.remoteInfo);
+      globalLoading[s] && delete globalLoading[s], this.moduleCache.delete(e.name);
+    }
+  }
+  registerRemote(e, r, n) {
+    const o = () => {
+      if (e.alias) {
+        const s = r.find((a) => {
+          var c;
+          return e.alias && (a.name.startsWith(e.alias) || ((c = a.alias) == null ? void 0 : c.startsWith(e.alias)));
+        });
+        assert(!s, `The alias ${e.alias} of remote ${e.name} is not allowed to be the prefix of ${s && s.name} name or alias`);
+      }
+      "entry" in e && isBrowserEnv$1() && !e.entry.startsWith("http") && (e.entry = new URL(e.entry, window.location.origin).href), e.shareScope || (e.shareScope = DEFAULT_SCOPE), e.type || (e.type = DEFAULT_REMOTE_TYPE);
+    }, i = r.find((s) => s.name === e.name);
+    if (!i)
+      o(), r.push(e);
+    else {
+      const s = [
+        `The remote "${e.name}" is already registered.`,
+        n != null && n.force ? "Hope you have known that OVERRIDE it may have some unexpected errors" : 'If you want to merge the remote, you can set "force: true".'
+      ];
+      n != null && n.force && (this.removeRemote(i), o(), r.push(e)), warn$1(s.join(" "));
+    }
+  }
+  registerRemotes(e, r) {
+    e.forEach((n) => {
+      this.registerRemote(n, this.options.remotes, {
+        force: r == null ? void 0 : r.force
+      });
+    });
+  }
+  constructor(e) {
+    this.hooks = new PluginSystem({
+      beforeInit: new SyncWaterfallHook("beforeInit"),
+      init: new SyncHook(),
+      beforeRequest: new AsyncWaterfallHook("beforeRequest"),
+      afterResolve: new AsyncWaterfallHook("afterResolve"),
+      beforeInitContainer: new AsyncWaterfallHook("beforeInitContainer"),
+      initContainerShareScopeMap: new AsyncWaterfallHook("initContainer"),
+      initContainer: new AsyncWaterfallHook("initContainer"),
+      onLoad: new AsyncHook("onLoad"),
+      handlePreloadModule: new SyncHook("handlePreloadModule"),
+      errorLoadRemote: new AsyncHook("errorLoadRemote"),
+      beforeLoadShare: new AsyncWaterfallHook("beforeLoadShare"),
+      loadShare: new AsyncHook(),
+      resolveShare: new SyncWaterfallHook("resolveShare"),
+      beforePreloadRemote: new AsyncHook(),
+      generatePreloadAssets: new AsyncHook("generatePreloadAssets"),
+      afterPreloadRemote: new AsyncHook()
+    }), this.version = "0.1.2", this.moduleCache = /* @__PURE__ */ new Map(), this.loaderHook = new PluginSystem({
+      getModuleInfo: new SyncHook(),
+      createScript: new SyncHook(),
+      createLink: new SyncHook(),
+      fetch: new AsyncHook("fetch")
+    });
+    const r = {
+      id: getBuilderId(),
+      name: e.name,
+      plugins: [
+        snapshotPlugin(),
+        generatePreloadAssetsPlugin()
+      ],
+      remotes: [],
+      shared: {},
+      inBrowser: isBrowserEnv$1()
+    };
+    this.name = e.name, this.options = r, this.shareScopeMap = {}, this._setGlobalShareScopeMap(), this.snapshotHandler = new SnapshotHandler(this), this.registerPlugins([
+      ...r.plugins,
+      ...e.plugins || []
+    ]), this.options = this.formatOptions(r, e);
+  }
+}
+let FederationInstance = null;
+function init(t) {
+  const e = getGlobalFederationInstance(t.name, t.version);
+  if (e)
+    return e.initOptions(t), FederationInstance || (FederationInstance = e), e;
+  {
+    const r = getGlobalFederationConstructor() || FederationHost;
+    return FederationInstance = new r(t), setGlobalFederationInstance(FederationInstance), FederationInstance;
+  }
+}
+function loadRemote(...t) {
+  return assert(FederationInstance, "Please call init first"), FederationInstance.loadRemote.apply(FederationInstance, t);
+}
+setGlobalFederationConstructor(FederationHost);
+function isMetaMaskProvider(t) {
+  return t !== null && typeof t == "object" && t.hasOwnProperty("isMetaMask") && t.hasOwnProperty("request");
+}
+function detectMetaMaskProvider(t, { timeout: e = 3e3 } = {}) {
+  let r = !1;
+  return new Promise((n) => {
+    const o = (i) => {
+      const { info: s, provider: a } = i.detail;
+      ["io.metamask", "io.metamask.flask"].includes(s.rdns) && isMetaMaskProvider(a) && (n(a), r = !0);
+    };
+    typeof t.addEventListener == "function" && t.addEventListener(
+      "eip6963:announceProvider",
+      o
+    ), setTimeout(() => {
+      r || n(null);
+    }, e), typeof t.dispatchEvent == "function" && t.dispatchEvent(new Event("eip6963:requestProvider"));
+  });
+}
+async function waitForMetaMaskProvider(t, { timeout: e = 3e3, retries: r = 0 } = {}) {
+  return detectMetaMaskProvider(t, { timeout: e }).catch(function() {
+    return null;
+  }).then(function(n) {
+    return n || r === 0 ? n : waitForMetaMaskProvider(t, {
+      timeout: e,
+      retries: r - 1
+    });
+  });
+}
+async function detectMetamaskSupport(t) {
+  return await waitForMetaMaskProvider(t, { retries: 3 });
+}
+async function fetchMetaMaskSnapWallet(t) {
+  await init({
+    name: "MetaMaskStarknetSnapWallet",
+    remotes: [
+      {
+        name: "MetaMaskStarknetSnapWallet",
+        alias: "MetaMaskStarknetSnapWallet",
+        entry: "https://snaps.consensys.io/starknet/get-starknet/v1/remoteEntry.js"
+      }
+    ]
+  });
+  const e = await loadRemote("MetaMaskStarknetSnapWallet/index"), { MetaMaskSnapWallet: r } = e;
+  return new r(t, "*");
+}
+function createMetaMaskProviderWrapper(t, e) {
+  let r, n;
+  return {
+    id: t.id,
+    name: t.name,
+    icon: t.icon,
+    get version() {
+      var o;
+      return (o = r == null ? void 0 : r.version) != null ? o : "0.0.0";
+    },
+    get isConnected() {
+      var o;
+      return (o = r == null ? void 0 : r.isConnected) != null ? o : !1;
+    },
+    get provider() {
+      return r == null ? void 0 : r.provider;
+    },
+    get account() {
+      return r == null ? void 0 : r.account;
+    },
+    get selectedAddress() {
+      return r == null ? void 0 : r.selectedAddress;
+    },
+    get chainId() {
+      return r == null ? void 0 : r.chainId;
+    },
+    request(o) {
+      if (!r)
+        throw new Error("Wallet not enabled");
+      return r.request(o);
+    },
+    async enable() {
+      return r || (n = n || fetchMetaMaskSnapWallet(e), r = await n), await r.enable();
+    },
+    isPreauthorized() {
+      var o;
+      return (o = r == null ? void 0 : r.isPreauthorized()) != null ? o : Promise.resolve(!1);
+    },
+    on(o, i) {
+      if (!r)
+        throw new Error("Wallet not enabled");
+      return r.on(o, i);
+    },
+    off(o, i) {
+      if (!r)
+        throw new Error("Wallet not enabled");
+      return r.off(o, i);
+    }
+  };
+}
+async function injectMetamaskBridge(t) {
+  if (t.hasOwnProperty("starknet_metamask"))
+    return;
+  const e = wallets.find((n) => n.id === "metamask");
+  if (!e)
+    return;
+  const r = await detectMetamaskSupport(t);
+  !r || (t.starknet_metamask = createMetaMaskProviderWrapper(
+    e,
+    r
+  ));
+}
+function scanObjectForWallets(t, e) {
+  return Object.values(
+    Object.getOwnPropertyNames(t).reduce((r, n) => {
+      if (n.startsWith("starknet")) {
+        const o = t[n];
+        e(o) && !r[o.id] && (r[o.id] = o);
+      }
+      return r;
+    }, {})
+  );
+}
+const sortBy = (t, e) => {
+  if (e && Array.isArray(e)) {
+    t.sort((n, o) => e.indexOf(n.id) - e.indexOf(o.id));
+    const r = t.length - e.length;
+    return [
+      ...t.slice(r),
+      ...shuffle(t.slice(0, r))
+    ];
+  } else
+    return shuffle(t);
+}, defaultOptions = {
+  windowObject: ssrSafeWindow != null ? ssrSafeWindow : {},
+  isWalletObject: isWalletObj,
+  storageFactoryImplementation: (t) => new LocalStorageWrapper(t)
+};
+function getStarknet(t = {}) {
+  const { storageFactoryImplementation: e, windowObject: r, isWalletObject: n } = {
+    ...defaultOptions,
+    ...t
+  }, o = e("gsw-last");
+  return injectMetamaskBridge(r), {
+    getAvailableWallets: async (i = {}) => {
+      const s = scanObjectForWallets(
+        r,
+        n
+      );
+      return pipe$1(
+        (a) => filterBy(a, i),
+        (a) => sortBy(a, i.sort)
+      )(s);
+    },
+    getPreAuthorizedWallets: async (i = {}) => {
+      const s = scanObjectForWallets(
+        r,
+        n
+      );
+      return pipe$1(
+        (a) => filterByPreAuthorized(a),
+        (a) => filterBy(a, i),
+        (a) => sortBy(a, i.sort)
+      )(s);
+    },
+    getDiscoveryWallets: async (i = {}) => pipe$1(
+      (s) => filterBy(s, i),
+      (s) => sortBy(s, i.sort)
+    )(wallets),
+    getLastConnectedWallet: async () => {
+      const i = o.get(), s = scanObjectForWallets(r, n).find(
+        (c) => c.id === i
+      ), [a] = await filterByPreAuthorized(
+        s ? [s] : []
+      );
+      return a || (o.delete(), null);
+    },
+    enable: async (i, s) => {
+      if (await i.enable(s != null ? s : { starknetVersion: "v5" }), !i.isConnected)
+        throw new Error("Failed to connect to wallet");
+      return o.set(i.id), i;
+    },
+    disconnect: async ({ clearLastWallet: i } = {}) => {
+      i && o.delete();
+    }
+  };
+}
+getStarknet();
+
+const OZaccountClassHash = '0x5400e90f7e0ae78bd02c77cd75527280470e2fe19c54970dd79dc37a9d3645c';
 
 function getPrivStarkKey(privateKeyEth) {
   try {
-    console.log('privateKeyEth: ', privateKeyEth);
-    const privStarkKey = grindKey(privateKeyEth);    
-	console.log('privStarkKey x : ', privStarkKey);
+    const privStarkKey = grindKey(privateKeyEth);
     return '0x0' + privStarkKey
   } catch (e) {
+    console.log('privateKeyEth: ', privateKeyEth);
     console.log(e);
-    return "ERROR";
+    return '';
   }
 }
 
 function getPublicStarkKey(privStarkKey) {
   try {
-    console.log('privStarkKey: ', privStarkKey);
     const pubStarkKey = getStarkKey(privStarkKey);
     return pubStarkKey
   } catch (e) {
+    console.log('privStarkKey: ', privStarkKey);
     console.log(e);
-    return "ERROR";
+    return '';
   }
 }
 
@@ -37161,10 +39878,9 @@ function getPublicStarkKey(privStarkKey) {
       OZaccountConstructorCallData,
       0
     );
-	console.log("JS RESULT - OZcontractAddress: ", OZcontractAddress);
     return OZcontractAddress
   } catch (e) {
-    return "ERROR";
+    return null
   }
 }
 
@@ -37173,7 +39889,7 @@ async function deployAccount(privateKey, starkKeyPub, OZcontractAddress) {
     console.log('privateKey: ', privateKey);
     console.log('starkKeyPub: ', starkKeyPub);
     console.log('OZcontractAddress: ', OZcontractAddress);
-    const provider = new RpcProvider2({ nodeUrl: `https://katana.skyvn.top/` });
+    const provider = new RpcProvider2({ nodeUrl: `https://api.cartridge.gg/x/metalslug/katana` });
     const OZaccount = new Account(provider, OZcontractAddress, privateKey);
     const { transaction_hash, contract_address } = await OZaccount.deployAccount({
       classHash: OZaccountClassHash,
@@ -37183,20 +39899,46 @@ async function deployAccount(privateKey, starkKeyPub, OZcontractAddress) {
     console.log('Transaction hash: ', transaction_hash);
     const res = await provider.waitForTransaction(transaction_hash);
     console.log('✅ New OpenZeppelin account created.\n   address =', contract_address);
-	if (transaction_hash){
-		return "TRUE";
-	}else{
-		return "FALSE";
-	}
-    
+    if (transaction_hash) {
+      return "TRUE"
+    }
+    return "FALSE"
   } catch (e) {
     console.log(e);
-    return "ERROR";
+    return "ERROR"
   }
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
+async function signMessageStark(typeWallet, message) {
+  try {
+    const myFrontendProviderUrl = 'https://free-rpc.nethermind.io/mainnet-juno/v0_7';
+    let selectedWalletSWO;
+    if (typeWallet == "braavos") {
+      selectedWalletSWO = window.starknet_braavos;
+    } else {
+      selectedWalletSWO = window.starknet_argentX;
+    }
+    await selectedWalletSWO.enable();
+    await sleep(1000);
+    const myWalletAccount = new WalletAccount({ nodeUrl: myFrontendProviderUrl }, selectedWalletSWO);
+    await sleep(1000);
+    console.log(myWalletAccount);
+    const typedDataValidate = JSON.parse(message);
+    const signature = await myWalletAccount.signMessage(typedDataValidate);
+    console.log('Signature: ', signature);
+    return JSON.stringify(signature)
+  } catch (err) {
+    console.log(err);
+    return ""
+  }
+}
+
+exports.deployAccount = deployAccount;
 exports.getAccountContract = getAccountContract;
 exports.getPrivStarkKey = getPrivStarkKey;
 exports.getPublicStarkKey = getPublicStarkKey;
-exports.deployAccount = deployAccount;
+exports.signMessageStark = signMessageStark;
