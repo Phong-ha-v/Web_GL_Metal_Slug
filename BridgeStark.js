@@ -37765,7 +37765,7 @@ const ABI = [
 ];
 
 const NODE_URL = `https://api.cartridge.gg/x/metalslug-dev/katana`;
-const CLASS_HASH = '0x036078334509b514626504edc9fb252328d1a240e4e948bef8d0c08dff45927f';
+const CLASS_HASH = '0x07dc7899aa655b0aae51eadff6d801a58e97dd99cf4666ee59e704249e51adf2';
 
 const OZaccountClassHash = CLASS_HASH;
 
@@ -37820,10 +37820,12 @@ async function deployAccount(privateKey) {
     const provider = new RpcProvider2({
       nodeUrl: NODE_URL,
     });
-    const pubKey = getPublicStarkKey(privateKey);
-    const addressAccount = getAccountContract(privateKey);
-    const OZaccount = new Account(provider, addressAccount, privateKey);
-    const { transaction_hash, contract_address } =
+	  const pubKey = getPublicStarkKey(privateKey);
+	  console.log(pubKey)
+	  const addressAccount = getAccountContract(privateKey);
+	  console.log("1111111111111:  ", addressAccount)
+	  const OZaccount = new Account(provider, addressAccount, privateKey);
+		const { transaction_hash, contract_address } =
       await OZaccount.deployAccount({
         classHash: OZaccountClassHash,
         constructorCalldata: CallData.compile({ publicKey: pubKey }),
